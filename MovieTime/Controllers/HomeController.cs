@@ -5,11 +5,18 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using MovieTime.Models;
+using MovieTime.Entities;
 
 namespace MovieTime.Controllers
 {
     public class HomeController : Controller
     {
+        private MovieTimeContext movieTimeContext;
+        public HomeController(MovieTimeContext movieTimeContext)
+        {
+            this.movieTimeContext = movieTimeContext;
+        }
+
         public IActionResult Index()
         {
             return View();

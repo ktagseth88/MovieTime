@@ -1,11 +1,11 @@
 ﻿CREATE TABLE [dbo].[review]
 (
-	[review_id] INT NOT NULL PRIMARY KEY IDENTITY,
+	[review_id] INT NOT NULL PRIMARY KEY IDENTITY(1,1),
 	[user_id] INT NOT NULL,
 	[movie_id] INT NOT NULL,
 	[review_text] NVARCHAR(MAX) NOT NULL,
 	[rating] TINYINT NOT NULL DEFAULT 0,
-	[create_timestamp] DATETIME NOT NULL,
+	[create_timestamp] DATETIME NOT NULL DEFAULT GETDATE(),
 	[modify_timestamp] DATETIME NULL
 )
 GO

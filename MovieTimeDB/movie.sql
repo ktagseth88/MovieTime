@@ -1,6 +1,6 @@
 ﻿CREATE TABLE [dbo].[movie]
 (
-	[movie_id] INT NOT NULL PRIMARY KEY IDENTITY,
+	[movie_id] INT NOT NULL PRIMARY KEY IDENTITY(1,1),
 	[name] NVARCHAR(50) NOT NULL,
 	[release_year] SMALLINT NOT NULL,
 	[director_id] INT NOT NULL,

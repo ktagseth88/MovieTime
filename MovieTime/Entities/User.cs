@@ -12,7 +12,7 @@ namespace MovieTime.Entities
 
         public int UserId { get; set; }
         public string Username { get; set; }
-        public int PasswordHash { get; set; }
+        public string PasswordHash { get; set; }
         public DateTime CreateTimestamp { get; set; }
 
         public virtual ICollection<Review> Review { get; set; }

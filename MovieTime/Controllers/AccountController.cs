@@ -1,15 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using MovieTime.ViewModels.Account;
-using MovieTime.Services;
-using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.AspNetCore.Authentication;
-using System.Security.Claims;
+﻿using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using MovieTime.Services;
+using MovieTime.ViewModels.Account;
+using System.Security.Claims;
+using System.Threading.Tasks;
 
 namespace MovieTime.Controllers
 {
@@ -27,22 +23,14 @@ namespace MovieTime.Controllers
         {
             if (accountService.IsLoginValid(login))
             {
-                // Create the identity from the user info
-                var identity = new ClaimsIdentity(CookieAuthenticationDefaults.AuthenticationScheme, login.Username, ClaimTypes.Role);
-                identity.AddClaim(new Claim(ClaimTypes.NameIdentifier, login.Username));
-                identity.AddClaim(new Claim(ClaimTypes.Name, login.Username));
-
-                // Authenticate using the identity
-                var principal = new ClaimsPrincipal(identity);
-
-                await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principal, new AuthenticationProperties { IsPersistent = true });
+                await CreateUserIdentity(login.Username);
+                return RedirectToAction("Index", "Home");
             }
             else
             {
                 ModelState.AddModelError("Username", "Invalid login");
                 return View();
             }
-            return null;
         }
 
         public IActionResult Create()
@@ -51,7 +39,7 @@ namespace MovieTime.Controllers
         }
 
         [HttpPost]
-        public IActionResult Create(AccountCreationViewModel account)
+        public async Task<IActionResult> Create(AccountCreationViewModel account)
         {
             if (accountService.IsUsernameTaken(account.UserName))
             {
@@ -65,10 +53,19 @@ namespace MovieTime.Controllers
             if (ModelState.IsValid)
             {
                 accountService.CreateAccount(account);
-                return RedirectToAction("Login", new LoginViewModel { Username = account.UserName, Password = account.Password });
+
+                await CreateUserIdentity(account.UserName);
+
+                return RedirectToAction("Index", "Home");
             }
 
             return View();
+        }
+
+        public async Task CreateUserIdentity(string username)
+        {
+            var userPrincipal = accountService.GetUserPrincipal(username);
+            await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, userPrincipal, new AuthenticationProperties { IsPersistent = true });
         }
 
         public async Task<IActionResult> LogoutAsync()

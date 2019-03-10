@@ -31,9 +31,12 @@ namespace MovieTime.Services
         {
             var newUser = new User {
                 Username = userLogin.UserName,
-                PasswordHash = GetPasswordHash(userLogin.Password)
+                PasswordHash = GetPasswordHash(userLogin.Password),
+                CreateTimestamp = DateTime.Now
             };
 
+            movieTimeDb.Add(newUser);
+            movieTimeDb.SaveChanges();
         }
 
         public bool IsLoginValid(LoginViewModel userLogin)
@@ -48,6 +51,16 @@ namespace MovieTime.Services
                 var hashed = sha256.ComputeHash(System.Text.Encoding.UTF8.GetBytes(password));
                 return BitConverter.ToString(hashed).Replace("-", "");
             }
+        }
+
+        public ClaimsPrincipal GetUserPrincipal(string username)
+        {
+            var identity = new ClaimsIdentity(CookieAuthenticationDefaults.AuthenticationScheme, username, ClaimTypes.Role);
+            identity.AddClaim(new Claim(ClaimTypes.NameIdentifier, username));
+            identity.AddClaim(new Claim(ClaimTypes.Name, username));
+
+            // Authenticate using the identity
+            return new ClaimsPrincipal(identity);
         }
     }
 }

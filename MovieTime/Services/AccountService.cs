@@ -55,9 +55,12 @@ namespace MovieTime.Services
 
         public ClaimsPrincipal GetUserPrincipal(string username)
         {
-            var identity = new ClaimsIdentity(CookieAuthenticationDefaults.AuthenticationScheme, username, ClaimTypes.Role);
-            identity.AddClaim(new Claim(ClaimTypes.NameIdentifier, username));
-            identity.AddClaim(new Claim(ClaimTypes.Name, username));
+            var Claims = new List<Claim>
+            {
+                new Claim(ClaimTypes.Name, username)
+            };
+
+            var identity = new ClaimsIdentity(Claims, "login");
 
             // Authenticate using the identity
             return new ClaimsPrincipal(identity);

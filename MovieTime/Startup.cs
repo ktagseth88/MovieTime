@@ -20,12 +20,11 @@ namespace MovieTime
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddAuthentication(options =>
-            {
-                options.DefaultSignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-                options.DefaultAuthenticateScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-                options.DefaultChallengeScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-            }).AddCookie();
+            services.AddAuthentication(
+                CookieAuthenticationDefaults.AuthenticationScheme
+            ).AddCookie(options => {
+                options.LoginPath = "/Account/Login/";
+            });
 
             services.AddMvc();
             services.AddDbContext<MovieTimeContext>(options =>
@@ -36,6 +35,8 @@ namespace MovieTime
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
+            app.UseAuthentication();
+
             if (env.IsDevelopment())
             {
                 app.UseBrowserLink();
@@ -54,8 +55,6 @@ namespace MovieTime
                     name: "default",
                     template: "{controller=Account}/{action=Login}");
             });
-
-            app.UseAuthentication();
         }
     }
 }

@@ -12,7 +12,7 @@ namespace MovieTime.Entities
 
         public int MovieId { get; set; }
         public string Name { get; set; }
-        public short ReleaseYear { get; set; }
+        public DateTime? ReleaseYear { get; set; }
         public int DirectorId { get; set; }
         public int GenreId { get; set; }
         public int SubGenreId { get; set; }

@@ -2,7 +2,7 @@
 (
 	[movie_id] INT NOT NULL PRIMARY KEY IDENTITY(1,1),
 	[name] NVARCHAR(50) NOT NULL,
-	[release_year] SMALLINT NOT NULL,
+	[release_date] DATETIME NULL,
 	[director_id] INT NOT NULL,
 	[genre_id] INT NOT NULL,
 	[sub_genre_id] INT NOT NULL

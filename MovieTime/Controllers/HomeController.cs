@@ -2,9 +2,11 @@
 using MovieTime.Entities;
 using MovieTime.Models;
 using System.Diagnostics;
+using Microsoft.AspNetCore.Authorization;
 
 namespace MovieTime.Controllers
 {
+    [Authorize]
     public class HomeController : Controller
     {
         private MovieTimeContext movieTimeContext;

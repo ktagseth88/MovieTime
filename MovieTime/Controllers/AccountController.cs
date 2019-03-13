@@ -65,7 +65,7 @@ namespace MovieTime.Controllers
         public async Task CreateUserIdentity(string username)
         {
             var userPrincipal = accountService.GetUserPrincipal(username);
-            await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, userPrincipal, new AuthenticationProperties { IsPersistent = true });
+            await HttpContext.SignInAsync(userPrincipal);
         }
 
         public async Task<IActionResult> LogoutAsync()

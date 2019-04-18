@@ -63,5 +63,6 @@
     <Build Include="movie.sql" />
     <Build Include="review.sql" />
     <Build Include="genre.sql" />
+    <Build Include="director.sql" />
   </ItemGroup>
 </Project>

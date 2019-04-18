@@ -1,18 +1,27 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using MovieTime.Entities;
 using MovieTime.Models;
 using System.Diagnostics;
 using Microsoft.AspNetCore.Authorization;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
+using System.IO;
+using CsvHelper;
+using MovieTime.ViewModels.WatchList;
+using System.Collections.Generic;
+using System.Linq;
+using CsvHelper.Configuration;
+using System;
+using MovieTime.Services;
 
 namespace MovieTime.Controllers
 {
     [Authorize]
     public class HomeController : Controller
     {
-        private MovieTimeContext movieTimeContext;
-        public HomeController(MovieTimeContext movieTimeContext)
+        private MovieService _watchListService;
+        public HomeController(MovieService watchListService)
         {
-            this.movieTimeContext = movieTimeContext;
+            _watchListService = watchListService;
         }
 
         public IActionResult Index()
@@ -20,18 +29,35 @@ namespace MovieTime.Controllers
             return View();
         }
 
-        public IActionResult About()
+        [HttpPost]
+        public async Task<IActionResult> UploadWatchList(IFormFile watchlistEntry)
         {
-            ViewData["Message"] = "Your application description page.";
+            var contents = new List<WatchListUpload>();
 
-            return View();
-        }
+            using(var reader = new StreamReader(watchlistEntry.OpenReadStream()))
+            {
+                //fileContents = await reader.ReadToEndAsync();
+                var csvReader = new CsvReader(reader);
+                csvReader.Configuration.RegisterClassMap<WatchListUploadMap>();
+                contents = csvReader.GetRecords<WatchListUpload>().ToList() ;
+            }
 
-        public IActionResult Contact()
-        {
-            ViewData["Message"] = "Your contact page.";
+            var watchlist = new WatchList
+            {
+                Movies = contents.Select(x => (Movie: new Movie
+                {
+                    Title = x.Title,
+                    Director = x.Director,
+                    ReleaseDate = x.ReleaseDate,
+                    Genre = x.Genres.Split(',').FirstOrDefault()?.Trim(),
+                    SubGenre = x.Genres.Split(',').Skip(1)?.FirstOrDefault()?.Trim()
+                }, rating: x.UserRating)),
+                UserName = HttpContext.User.Identity.Name
+            };
 
-            return View();
+            _watchListService.UpsertWatchList(watchlist);
+
+            return Ok(new { Count = contents.Count() });
         }
 
         public IActionResult Error()

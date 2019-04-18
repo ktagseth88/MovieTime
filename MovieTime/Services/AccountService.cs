@@ -10,21 +10,22 @@ using System.Security.Cryptography;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Http;
+using Microsoft.EntityFrameworkCore;
 
 namespace MovieTime.Services
 {
     public class AccountService
     {
-        private MovieTimeContext movieTimeDb;
+        private MovieTimeContext _movieTimeDb;
 
-        public AccountService()
+        public AccountService(MovieTimeContext movieTimeDb)
         {
-            movieTimeDb = new MovieTimeContext();
+            _movieTimeDb = movieTimeDb;
         }
 
         public bool IsUsernameTaken(string username)
         {
-            return movieTimeDb.User.Any(x => x.Username == username);
+            return _movieTimeDb.User.Any(x => x.Username == username);
         }
 
         public void CreateAccount(AccountCreationViewModel userLogin)
@@ -35,13 +36,13 @@ namespace MovieTime.Services
                 CreateTimestamp = DateTime.Now
             };
 
-            movieTimeDb.Add(newUser);
-            movieTimeDb.SaveChanges();
+            _movieTimeDb.Add(newUser);
+            _movieTimeDb.SaveChanges();
         }
 
         public bool IsLoginValid(LoginViewModel userLogin)
         {
-            return movieTimeDb.User.Any(x => x.PasswordHash == GetPasswordHash(userLogin.Password) && x.Username == userLogin.Username);
+            return _movieTimeDb.User.Any(x => x.PasswordHash == GetPasswordHash(userLogin.Password) && x.Username == userLogin.Username);
         }
 
         private static string GetPasswordHash(string password)

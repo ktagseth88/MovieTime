@@ -11,7 +11,12 @@ namespace MovieTime.Controllers
 {
     public class AccountController : Controller
     {
-        private AccountService accountService = new AccountService();
+        private AccountService _accountService;
+
+        public AccountController(AccountService accountService)
+        {
+            _accountService = accountService;
+        }
 
         public IActionResult Login()
         {
@@ -21,9 +26,9 @@ namespace MovieTime.Controllers
         [HttpPost]
         public async Task<IActionResult> Login(LoginViewModel login)
         {
-            if (accountService.IsLoginValid(login))
+            if (_accountService.IsLoginValid(login))
             {
-                await CreateUserIdentity(login.Username);
+                await CreateUserIdentityAsync(login.Username);
                 return RedirectToAction("Index", "Home");
             }
             else
@@ -41,7 +46,7 @@ namespace MovieTime.Controllers
         [HttpPost]
         public async Task<IActionResult> Create(AccountCreationViewModel account)
         {
-            if (accountService.IsUsernameTaken(account.UserName))
+            if (_accountService.IsUsernameTaken(account.UserName))
             {
                 ModelState.AddModelError("Username", "Username already taken");
             }
@@ -52,9 +57,8 @@ namespace MovieTime.Controllers
             }
             if (ModelState.IsValid)
             {
-                accountService.CreateAccount(account);
-
-                await CreateUserIdentity(account.UserName);
+                _accountService.CreateAccount(account);
+                await CreateUserIdentityAsync(account.UserName);
 
                 return RedirectToAction("Index", "Home");
             }
@@ -62,9 +66,9 @@ namespace MovieTime.Controllers
             return View();
         }
 
-        public async Task CreateUserIdentity(string username)
+        public async Task CreateUserIdentityAsync(string username)
         {
-            var userPrincipal = accountService.GetUserPrincipal(username);
+            var userPrincipal = _accountService.GetUserPrincipal(username);
             await HttpContext.SignInAsync(userPrincipal);
         }
 

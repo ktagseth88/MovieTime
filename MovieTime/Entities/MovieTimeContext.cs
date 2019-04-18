@@ -1,7 +1,7 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
-using Microsoft.Extensions.Configuration;
+
 namespace MovieTime.Entities
 {
     public partial class MovieTimeContext : DbContext
@@ -15,6 +15,7 @@ namespace MovieTime.Entities
         {
         }
 
+        public virtual DbSet<Director> Director { get; set; }
         public virtual DbSet<Genre> Genre { get; set; }
         public virtual DbSet<Movie> Movie { get; set; }
         public virtual DbSet<Review> Review { get; set; }
@@ -23,6 +24,19 @@ namespace MovieTime.Entities
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.HasAnnotation("ProductVersion", "2.2.2-servicing-10034");
+
+            modelBuilder.Entity<Director>(entity =>
+            {
+                entity.ToTable("director");
+
+                entity.Property(e => e.DirectorId).HasColumnName("director_id");
+
+                entity.Property(e => e.Name)
+                    .IsRequired()
+                    .HasColumnName("name")
+                    .HasMaxLength(255)
+                    .IsUnicode(false);
+            });
 
             modelBuilder.Entity<Genre>(entity =>
             {
@@ -51,9 +65,17 @@ namespace MovieTime.Entities
                     .HasColumnName("name")
                     .HasMaxLength(50);
 
-                entity.Property(e => e.ReleaseYear).HasColumnName("release_year");
+                entity.Property(e => e.ReleaseDate)
+                    .HasColumnName("release_date")
+                    .HasColumnType("datetime");
 
                 entity.Property(e => e.SubGenreId).HasColumnName("sub_genre_id");
+
+                entity.HasOne(d => d.Director)
+                    .WithMany(p => p.Movie)
+                    .HasForeignKey(d => d.DirectorId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_movie_to_director");
 
                 entity.HasOne(d => d.Genre)
                     .WithMany(p => p.Movie)
@@ -70,7 +92,8 @@ namespace MovieTime.Entities
 
                 entity.Property(e => e.CreateTimestamp)
                     .HasColumnName("create_timestamp")
-                    .HasColumnType("datetime");
+                    .HasColumnType("datetime")
+                    .HasDefaultValueSql("(getdate())");
 
                 entity.Property(e => e.ModifyTimestamp)
                     .HasColumnName("modify_timestamp")
@@ -80,9 +103,7 @@ namespace MovieTime.Entities
 
                 entity.Property(e => e.Rating).HasColumnName("rating");
 
-                entity.Property(e => e.ReviewText)
-                    .IsRequired()
-                    .HasColumnName("review_text");
+                entity.Property(e => e.ReviewText).HasColumnName("review_text");
 
                 entity.Property(e => e.UserId).HasColumnName("user_id");
 
@@ -107,9 +128,12 @@ namespace MovieTime.Entities
 
                 entity.Property(e => e.CreateTimestamp)
                     .HasColumnName("create_timestamp")
-                    .HasColumnType("datetime");
+                    .HasColumnType("datetime")
+                    .HasDefaultValueSql("(getdate())");
 
-                entity.Property(e => e.PasswordHash).HasColumnName("password_hash");
+                entity.Property(e => e.PasswordHash)
+                    .IsRequired()
+                    .HasColumnName("password_hash");
 
                 entity.Property(e => e.Username)
                     .IsRequired()

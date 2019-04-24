@@ -26,7 +26,15 @@ namespace MovieTime.Controllers
 
         public IActionResult Index()
         {
-            return View();
+            var userMovieDetails = _watchListService.GetUserMovieList(HttpContext.User.Identity.Name).Select(x => new ViewModels.UserMovieDetailViewModel
+            {
+                Rating = x.Rating,
+                Director = x.Director,
+                MovieTitle = x.MovieTitle,
+                Genre = x.Genre
+            });
+
+            return View(userMovieDetails);
         }
 
         [HttpPost]
@@ -34,7 +42,7 @@ namespace MovieTime.Controllers
         {
             var contents = new List<WatchListUpload>();
 
-            using(var reader = new StreamReader(watchlistEntry.OpenReadStream()))
+            using(var reader = new StreamReader(watchlistEntry.OpenReadStream(), System.Text.Encoding.UTF8))
             {
                 //fileContents = await reader.ReadToEndAsync();
                 var csvReader = new CsvReader(reader);
@@ -57,7 +65,7 @@ namespace MovieTime.Controllers
 
             _watchListService.UpsertWatchList(watchlist);
 
-            return Ok(new { Count = contents.Count() });
+            return RedirectToAction("Index");
         }
 
         public IActionResult Error()

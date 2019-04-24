@@ -47,6 +47,21 @@ namespace MovieTime.Services
             _movieTimeDb.SaveChanges();
         }
 
+        public IEnumerable<UserMovieDetails> GetUserMovieList(string username)
+        {
+            var userMovieList = _movieTimeDb.Review.Where(x => x.User.Username == username);
+
+            var userMovieListDetails = userMovieList.Select(x => new UserMovieDetails
+            {
+                MovieTitle = x.Movie.Name,
+                Rating = x.Rating,
+                Director = x.Movie.Director.Name,
+                Genre = x.Movie.Genre.Name
+            });
+
+            return userMovieListDetails;
+        }
+
         public void InsertMovies(IEnumerable<Models.Movie> movies)
         {
             var newMovies = movies.Where(x => !_movieTimeDb.Movie.Any(y => y.Name == x.Title && y.Director.Name == x.Director));

@@ -18,13 +18,33 @@ namespace MovieTime.Services
         public void UpsertWatchList(WatchList watchList)
         {
             var genres = watchList.Movies.Select(x => x.Movie.Genre).Concat(watchList.Movies.Select(x => x.Movie.SubGenre)).Where(x => x != null).Distinct().ToList();
-            genres = genres.Distinct().ToList();
             InsertGenres(genres);
 
             var directors = watchList.Movies.Select(x => x.Movie.Director).Distinct();
             InsertDirectors(directors);
 
             InsertMovies(watchList.Movies.Select(x => x.Movie));
+
+            var userWatchList = _movieTimeDb.User.FirstOrDefault(x => x.Username == watchList.UserName).Review;
+
+            var newUserMovies = from m in watchList.Movies
+                       where _movieTimeDb.Movie.Any(x => x.Director.Name == m.Movie.Director && x.Name == m.Movie.Title)
+                       select m;
+
+            var user = _movieTimeDb.User.FirstOrDefault(x => x.Username == watchList.UserName);
+
+            var newUserReviews = newUserMovies.Select(x => new Review
+            {
+                User = user,
+                UserId = user.UserId,
+                MovieId = _movieTimeDb.Movie.FirstOrDefault(y => y.Name == x.Movie.Title && y.Director.Name == x.Movie.Director).MovieId,
+                Rating = x.Rating,
+                ReviewText = "",
+                CreateTimestamp = DateTime.Now
+            });
+
+            _movieTimeDb.AddRange(newUserReviews);
+            _movieTimeDb.SaveChanges();
         }
 
         public void InsertMovies(IEnumerable<Models.Movie> movies)

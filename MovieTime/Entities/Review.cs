@@ -9,7 +9,7 @@ namespace MovieTime.Entities
         public int UserId { get; set; }
         public int MovieId { get; set; }
         public string ReviewText { get; set; }
-        public byte Rating { get; set; }
+        public byte? Rating { get; set; }
         public DateTime CreateTimestamp { get; set; }
         public DateTime? ModifyTimestamp { get; set; }
 

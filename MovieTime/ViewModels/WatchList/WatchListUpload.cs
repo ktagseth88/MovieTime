@@ -12,7 +12,7 @@ namespace MovieTime.ViewModels.WatchList
         public DateTime ReleaseDate { get; set; }
         public string Director { get; set; }
         public string Description { get; set; }
-        public int? UserRating { get; set; }
+        public byte? UserRating { get; set; }
         //Genres from imdb formatted as "genre 1, genre 2, genre 3"
         //We will only store first 2 genres
         public string Genres { get; set; }

@@ -93,5 +93,27 @@ namespace MovieTime.Services
             _movieTimeDb.Director.AddRange(newDirectors.Select(x => new Director { Name = x }));
             _movieTimeDb.SaveChanges();
         }
+
+        public void UpdateReview(UserReviewModel userReview)
+        {
+            if(_movieTimeDb.Review.Any(x => x.User.Username == userReview.Username && x.MovieId == userReview.movie_id))
+            {
+                var dbReview = _movieTimeDb.Review.FirstOrDefault(x => x.User.Username == userReview.Username && x.MovieId == userReview.movie_id);
+                dbReview.Rating = userReview.Rating;
+                dbReview.ReviewText = userReview.Description;
+            }
+            else
+            {
+                var dbReview = new Review
+                {
+                    Rating = userReview.Rating,
+                    MovieId = userReview.movie_id,
+                    UserId = _movieTimeDb.User.FirstOrDefault(x => x.Username == userReview.Username).UserId,
+                    ReviewText = userReview.Description
+                };
+            }
+
+            _movieTimeDb.SaveChanges();
+        }
     }
 }

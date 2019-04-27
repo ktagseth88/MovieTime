@@ -8,6 +8,7 @@ namespace MovieTime.Entities
         public User()
         {
             Review = new HashSet<Review>();
+            UserWatchPartyXref = new HashSet<UserWatchPartyXref>();
         }
 
         public int UserId { get; set; }
@@ -16,5 +17,6 @@ namespace MovieTime.Entities
         public DateTime CreateTimestamp { get; set; }
 
         public virtual ICollection<Review> Review { get; set; }
+        public virtual ICollection<UserWatchPartyXref> UserWatchPartyXref { get; set; }
     }
 }

@@ -20,6 +20,8 @@ namespace MovieTime.Entities
         public virtual DbSet<Movie> Movie { get; set; }
         public virtual DbSet<Review> Review { get; set; }
         public virtual DbSet<User> User { get; set; }
+        public virtual DbSet<UserWatchPartyXref> UserWatchPartyXref { get; set; }
+        public virtual DbSet<WatchParty> WatchParty { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -63,7 +65,7 @@ namespace MovieTime.Entities
                 entity.Property(e => e.Name)
                     .IsRequired()
                     .HasColumnName("name")
-                    .HasMaxLength(50);
+                    .HasMaxLength(255);
 
                 entity.Property(e => e.ReleaseDate)
                     .HasColumnName("release_date")
@@ -74,13 +76,11 @@ namespace MovieTime.Entities
                 entity.HasOne(d => d.Director)
                     .WithMany(p => p.Movie)
                     .HasForeignKey(d => d.DirectorId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_movie_to_director");
 
                 entity.HasOne(d => d.Genre)
                     .WithMany(p => p.Movie)
                     .HasForeignKey(d => d.GenreId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_movie_to_sub_genre");
             });
 
@@ -101,7 +101,9 @@ namespace MovieTime.Entities
 
                 entity.Property(e => e.MovieId).HasColumnName("movie_id");
 
-                entity.Property(e => e.Rating).HasColumnName("rating");
+                entity.Property(e => e.Rating)
+                    .HasColumnName("rating")
+                    .HasDefaultValueSql("((0))");
 
                 entity.Property(e => e.ReviewText).HasColumnName("review_text");
 
@@ -139,6 +141,41 @@ namespace MovieTime.Entities
                     .IsRequired()
                     .HasColumnName("username")
                     .HasMaxLength(20);
+            });
+
+            modelBuilder.Entity<UserWatchPartyXref>(entity =>
+            {
+                entity.ToTable("user_watch_party_xref");
+
+                entity.Property(e => e.Id).HasColumnName("id");
+
+                entity.Property(e => e.UserId).HasColumnName("user_id");
+
+                entity.Property(e => e.WatchPartyId).HasColumnName("watch_party_id");
+
+                entity.HasOne(d => d.User)
+                    .WithMany(p => p.UserWatchPartyXref)
+                    .HasForeignKey(d => d.UserId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_user_user_watch_party_xref");
+
+                entity.HasOne(d => d.WatchParty)
+                    .WithMany(p => p.UserWatchPartyXref)
+                    .HasForeignKey(d => d.WatchPartyId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_watch_party_user_watch_party_xref");
+            });
+
+            modelBuilder.Entity<WatchParty>(entity =>
+            {
+                entity.ToTable("watch_party");
+
+                entity.Property(e => e.WatchPartyId).HasColumnName("watch_party_id");
+
+                entity.Property(e => e.Name)
+                    .HasColumnName("name")
+                    .HasMaxLength(255)
+                    .IsUnicode(false);
             });
         }
     }

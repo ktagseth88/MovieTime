@@ -1,4 +1,5 @@
-﻿using MovieTime.Entities;
+﻿using Microsoft.EntityFrameworkCore;
+using MovieTime.Entities;
 using MovieTime.Models;
 using System;
 using System.Collections.Generic;
@@ -56,7 +57,8 @@ namespace MovieTime.Services
                 MovieTitle = x.Movie.Name,
                 Rating = x.Rating,
                 Director = x.Movie.Director.Name,
-                Genre = x.Movie.Genre.Name
+                Genre = x.Movie.Genre.Name,
+                ReviewId = x.ReviewId
             });
 
             return userMovieListDetails;
@@ -114,6 +116,19 @@ namespace MovieTime.Services
             }
 
             _movieTimeDb.SaveChanges();
+        }
+
+        public UserReviewModel GetReview(int reviewId)
+        {
+            var dbReview = _movieTimeDb.Review.Include(x => x.Movie).Include(x => x.User).FirstOrDefault(x => x.ReviewId == reviewId);
+            return new UserReviewModel
+            {
+                Rating = dbReview.Rating,
+                Description = dbReview.ReviewText,
+                Username = dbReview.User.Username,
+                movie_id = dbReview.MovieId,
+                MovieTitle = dbReview.Movie.Name
+            };
         }
     }
 }

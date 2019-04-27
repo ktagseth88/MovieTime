@@ -31,7 +31,8 @@ namespace MovieTime.Controllers
                 Rating = x.Rating,
                 Director = x.Director,
                 MovieTitle = x.MovieTitle,
-                Genre = x.Genre
+                Genre = x.Genre,
+                ReviewId = x.ReviewId
             });
 
             return View(userMovieDetails);
@@ -64,6 +65,38 @@ namespace MovieTime.Controllers
             };
 
             _watchListService.UpsertWatchList(watchlist);
+
+            return RedirectToAction("Index");
+        }
+
+        [HttpGet]
+        public IActionResult EditUserReview(int reviewId)
+        {
+            var reviewModel = _watchListService.GetReview(reviewId);
+
+            var reviewViewModel = new UserReviewViewModel
+            {
+                MovieId = reviewModel.movie_id,
+                MovieName = reviewModel.MovieTitle,
+                Rating = reviewModel.Rating,
+                ReviewText = reviewModel.Description
+            };
+            return View(reviewViewModel);
+        }
+
+        [HttpPost]
+        public IActionResult EditUserReview(UserReviewViewModel reviewViewModel)
+        {
+            var reviewModel = new UserReviewModel
+            {
+                movie_id = reviewViewModel.MovieId,
+                Description = reviewViewModel.ReviewText,
+                Rating = reviewViewModel.Rating,
+                Username = HttpContext.User.Identity.Name,
+                MovieTitle = reviewViewModel.MovieName
+            };
+
+            _watchListService.UpdateReview(reviewModel);
 
             return RedirectToAction("Index");
         }

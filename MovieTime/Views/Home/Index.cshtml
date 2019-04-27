@@ -25,6 +25,7 @@
             <th>Director</th>
             <th>Score</th>
             <th>Genre</th>
+            <th>Actions</th>
         </tr>
     </thead>
     <tbody>
@@ -35,6 +36,7 @@
                 <td>@movie.Director</td>
                 <td>@movie.Rating</td>
                 <td>@movie.Genre</td>
+                <td><a asp-action="EditUserReview" asp-route-reviewId="@movie.ReviewId">Edit</a></td>
             </tr>
         }
     </tbody>

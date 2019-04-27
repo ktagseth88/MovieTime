@@ -11,5 +11,6 @@ namespace MovieTime.Models
         public string Genre { get; set; }
         public string Director { get; set; }
         public byte? Rating { get; set; }
+        public int ReviewId { get; set; }
     }
 }

@@ -64,5 +64,7 @@
     <Build Include="review.sql" />
     <Build Include="genre.sql" />
     <Build Include="director.sql" />
+    <Build Include="watch_party.sql" />
+    <Build Include="user_watch_party_xref.sql" />
   </ItemGroup>
 </Project>

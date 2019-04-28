@@ -1,0 +1,31 @@
+﻿@model IEnumerable<MovieTime.ViewModels.WatchParty.WatchPartyViewModel>
+
+@{
+    ViewData["Title"] = "Watch Parties";
+}
+<h2 class="row">Watch Party!!</h2>
+
+<div class="row">
+    <h4>Watch Parties</h4>
+    <hr />
+    @foreach (var party in Model)
+    {
+        <h4>@party.Name</h4>
+        <div class="col-md-4" style="border:1px solid black">
+            <ul>
+                @foreach (var user in party.Users)
+                {
+                    <li>@user</li>
+                }
+            </ul>
+            <button asp-controller="WatchParty" asp-action="Edit" asp-route-WatchPartyId="@party.WatchPartyId">Edit</button>
+        </div>
+    }
+</div>
+<br />
+<br />
+<div>
+    <a asp-controller="WatchParty" asp-action="Edit">Create New</a>
+    <br />
+    <a asp-controller="Home" asp-action="Index">Back to List</a>
+</div>

@@ -19,11 +19,20 @@ namespace MovieTime.Services
 
         public IEnumerable<WatchPartyModel> GetWatchPartiesByUser(string username)
         {
-            var watchParty = _movieTimeDb.User.FirstOrDefault().UserWatchPartyXref.Select(x => new WatchPartyModel
-            {
-                PartyName = x.WatchParty.Name,
-                Users = x.WatchParty.UserWatchPartyXref.Select(y => y.User.Username)
-            });
+            //TODO: Don't do this awful join thing, this goes around in circles with joins for no reason
+            var watchParty = _movieTimeDb.User
+                .Include(x => x.UserWatchPartyXref)
+                    .ThenInclude(x => x.WatchParty)
+                    .ThenInclude(x => x.UserWatchPartyXref)
+                    .ThenInclude(x => x.User)
+                .FirstOrDefault(x => x.Username == username)
+                .UserWatchPartyXref
+                .Select(x => new WatchPartyModel
+                {
+                    PartyName = x.WatchParty.Name,
+                    Users = x.WatchParty.UserWatchPartyXref.Select(y => y.User.Username),
+                    WatchPartyId = x.WatchPartyId
+                });
 
             return watchParty;
         }
@@ -66,7 +75,20 @@ namespace MovieTime.Services
                     UserId = _movieTimeDb.User.FirstOrDefault(x => x.Username == u).UserId
                 });
             }
+
             _movieTimeDb.SaveChanges();
+        }
+
+        public WatchPartyModel GetWatchPartyById(int watchPartyId)
+        {
+            var watchPartyModel = _movieTimeDb.WatchParty.Where(x => x.WatchPartyId == watchPartyId).Select(x => new WatchPartyModel
+            {
+                PartyName = x.Name,
+                Users = x.UserWatchPartyXref.Select(y => y.User.Username),
+                WatchPartyId = x.WatchPartyId
+            }).FirstOrDefault();
+
+            return watchPartyModel;
         }
     }
 }

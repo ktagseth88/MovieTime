@@ -25,16 +25,59 @@ namespace MovieTime.Controllers
         }
 
         [HttpGet]
-        public IActionResult GetUserWatchParties()
+        public IActionResult Index()
         {
             var watchPartyModel = _watchPartyService.GetWatchPartiesByUser(HttpContext.User.Identity.Name);
             var watchPartyViewModels = watchPartyModel.Select(x => new WatchPartyViewModel
             {
                 WatchPartyId = x.WatchPartyId,
-                Users = x.Users
+                Users = x.Users,
+                Name = x.PartyName
             });
 
-            return View("UserWatchParties", watchPartyViewModels);
+            return View(watchPartyViewModels);
+        }
+
+        [HttpGet]
+        public IActionResult Edit(int? WatchPartyId)
+        {
+            if(WatchPartyId == null)
+            {
+                return View(new WatchPartyViewModel());
+            }
+            else
+            {
+                var model = _watchPartyService.GetWatchPartyById(WatchPartyId.Value);
+                var viewModel = new WatchPartyViewModel
+                {
+                    Name = model.PartyName,
+                    Users = model.Users,
+                    WatchPartyId = model.WatchPartyId
+                };
+                return View(viewModel);
+            }
+        }
+
+        [HttpPost]
+        public IActionResult Edit(WatchPartyViewModel watchParty)
+        {
+            var model = new WatchPartyModel
+            {
+                Users = watchParty.Users,
+                PartyName = watchParty.Name,
+                WatchPartyId = watchParty.WatchPartyId
+            };
+
+            if(watchParty.WatchPartyId == null)
+            {
+                _watchPartyService.InsertWatchParty(model);
+            }
+            else
+            {
+                _watchPartyService.UpdateWatchParty(model);
+            }
+
+            return RedirectToAction("Index");
         }
     }
 }

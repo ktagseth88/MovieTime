@@ -25,9 +25,9 @@ namespace MovieTime.Controllers
         }
 
         [HttpGet]
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            var watchPartyModel = _watchPartyService.GetWatchPartiesByUser(HttpContext.User.Identity.Name);
+            var watchPartyModel = await _watchPartyService.GetWatchPartiesByUser(HttpContext.User.Identity.Name);
             var watchPartyViewModels = watchPartyModel.Select(x => new WatchPartyViewModel
             {
                 WatchPartyId = x.WatchPartyId,
@@ -39,7 +39,7 @@ namespace MovieTime.Controllers
         }
 
         [HttpGet]
-        public IActionResult Edit(int? WatchPartyId)
+        public async Task<IActionResult> Edit(int? WatchPartyId)
         {
             if(WatchPartyId == null)
             {
@@ -47,7 +47,7 @@ namespace MovieTime.Controllers
             }
             else
             {
-                var model = _watchPartyService.GetWatchPartyById(WatchPartyId.Value);
+                var model = await _watchPartyService.GetWatchPartyById(WatchPartyId.Value);
                 var viewModel = new WatchPartyViewModel
                 {
                     Name = model.PartyName,
@@ -59,7 +59,7 @@ namespace MovieTime.Controllers
         }
 
         [HttpPost]
-        public IActionResult Edit(WatchPartyViewModel watchParty)
+        public async Task<IActionResult> Edit(WatchPartyViewModel watchParty)
         {
             var model = new WatchPartyModel
             {
@@ -70,20 +70,20 @@ namespace MovieTime.Controllers
 
             if(watchParty.WatchPartyId == null)
             {
-                _watchPartyService.InsertWatchParty(model);
+               await  _watchPartyService.InsertWatchParty(model);
             }
             else
             {
-                _watchPartyService.UpdateWatchParty(model);
+               await _watchPartyService.UpdateWatchParty(model);
             }
 
             return RedirectToAction("Index");
         }
 
         [HttpGet]
-        public IActionResult GetMovieSuggestion(int WatchPartyId)
+        public async Task<IActionResult> GetMovieSuggestion(int WatchPartyId)
         {
-            string movieSuggestion = _watchPartyService.GetMovieRecomendation(WatchPartyId);
+            string movieSuggestion = await _watchPartyService.GetMovieRecomendation(WatchPartyId);
             return Ok(movieSuggestion);
         }
     }

@@ -33,6 +33,7 @@ namespace MovieTime
 
             services.AddScoped<AccountService>();
             services.AddScoped<MovieService>();
+            services.AddScoped<WatchPartyService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

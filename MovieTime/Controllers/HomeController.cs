@@ -24,9 +24,9 @@ namespace MovieTime.Controllers
             _watchListService = watchListService;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            var userMovieDetails = _watchListService.GetUserMovieList(HttpContext.User.Identity.Name).Select(x => new ViewModels.UserMovieDetailViewModel
+            var userMovieDetails = (await _watchListService.GetUserMovieList(HttpContext.User.Identity.Name)).Select(x => new ViewModels.UserMovieDetailViewModel
             {
                 Rating = x.Rating,
                 Director = x.Director,
@@ -64,15 +64,15 @@ namespace MovieTime.Controllers
                 UserName = HttpContext.User.Identity.Name
             };
 
-            _watchListService.UpsertWatchList(watchlist);
+            await _watchListService.UpsertWatchList(watchlist);
 
             return RedirectToAction("Index");
         }
 
         [HttpGet]
-        public IActionResult EditUserReview(int reviewId)
+        public async Task<IActionResult> EditUserReview(int reviewId)
         {
-            var reviewModel = _watchListService.GetReview(reviewId);
+            var reviewModel = await _watchListService.GetReview(reviewId);
 
             var reviewViewModel = new UserReviewViewModel
             {
@@ -85,7 +85,7 @@ namespace MovieTime.Controllers
         }
 
         [HttpPost]
-        public IActionResult EditUserReview(UserReviewViewModel reviewViewModel)
+        public async Task<IActionResult> EditUserReview(UserReviewViewModel reviewViewModel)
         {
             var reviewModel = new UserReviewModel
             {
@@ -96,7 +96,7 @@ namespace MovieTime.Controllers
                 MovieTitle = reviewViewModel.MovieName
             };
 
-            _watchListService.UpdateReview(reviewModel);
+            await _watchListService.UpdateReview(reviewModel);
 
             return RedirectToAction("Index");
         }

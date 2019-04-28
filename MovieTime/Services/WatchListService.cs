@@ -16,55 +16,55 @@ namespace MovieTime.Services
             _movieTimeDb = movieTimeDb;
         }
 
-        public void UpsertWatchList(WatchList watchList)
+        public async Task UpsertWatchList(WatchList watchList)
         {
             var genres = watchList.Movies.Select(x => x.Movie.Genre).Concat(watchList.Movies.Select(x => x.Movie.SubGenre)).Where(x => x != null).Distinct().ToList();
-            InsertGenres(genres);
+            await InsertGenres(genres);
 
             var directors = watchList.Movies.Select(x => x.Movie.Director).Distinct();
-            InsertDirectors(directors);
+            await InsertDirectors(directors);
 
-            InsertMovies(watchList.Movies.Select(x => x.Movie));
+            await InsertMovies(watchList.Movies.Select(x => x.Movie));
 
-            var userWatchList = _movieTimeDb.User.FirstOrDefault(x => x.Username == watchList.UserName).Review;
+            var userWatchList = (await _movieTimeDb.User.FirstOrDefaultAsync(x => x.Username == watchList.UserName)).Review;
 
             var newUserMovies = from m in watchList.Movies
                        where _movieTimeDb.Movie.Any(x => x.Director.Name == m.Movie.Director && x.Name == m.Movie.Title)
                        select m;
 
-            var user = _movieTimeDb.User.FirstOrDefault(x => x.Username == watchList.UserName);
+            var user = await _movieTimeDb.User.FirstOrDefaultAsync(x => x.Username == watchList.UserName);
 
             var newUserReviews = newUserMovies.Select(x => new Review
             {
                 User = user,
                 UserId = user.UserId,
-                MovieId = _movieTimeDb.Movie.FirstOrDefault(y => y.Name == x.Movie.Title && y.Director.Name == x.Movie.Director).MovieId,
+                MovieId =  _movieTimeDb.Movie.FirstOrDefault(y => y.Name == x.Movie.Title && y.Director.Name == x.Movie.Director).MovieId,
                 Rating = x.Rating,
                 ReviewText = "",
                 CreateTimestamp = DateTime.Now
             });
-
+            
             _movieTimeDb.AddRange(newUserReviews);
-            _movieTimeDb.SaveChanges();
+            await _movieTimeDb.SaveChangesAsync();
         }
 
-        public IEnumerable<UserMovieDetails> GetUserMovieList(string username)
+        public async Task<IEnumerable<UserMovieDetails>> GetUserMovieList(string username)
         {
             var userMovieList = _movieTimeDb.Review.Where(x => x.User.Username == username);
 
-            var userMovieListDetails = userMovieList.Select(x => new UserMovieDetails
+            var userMovieListDetails = await userMovieList.Select(x => new UserMovieDetails
             {
                 MovieTitle = x.Movie.Name,
                 Rating = x.Rating,
                 Director = x.Movie.Director.Name,
                 Genre = x.Movie.Genre.Name,
                 ReviewId = x.ReviewId
-            });
+            }).ToListAsync();
 
             return userMovieListDetails;
         }
 
-        public void InsertMovies(IEnumerable<Models.Movie> movies)
+        public async Task InsertMovies(IEnumerable<Models.Movie> movies)
         {
             var newMovies = movies.Where(x => !_movieTimeDb.Movie.Any(y => y.Name == x.Title && y.Director.Name == x.Director));
 
@@ -73,34 +73,34 @@ namespace MovieTime.Services
                 Name = x.Title,
                 ReleaseDate = x.ReleaseDate,
                 GenreId = _movieTimeDb.Genre.FirstOrDefault(y => y.Name == x.Genre)?.GenreId,
-                SubGenreId = _movieTimeDb.Genre.FirstOrDefault(y => y.Name == x.SubGenre)?.GenreId,
-                DirectorId = _movieTimeDb.Director.FirstOrDefault(y => y.Name == x.Director)?.DirectorId
+                SubGenreId =  _movieTimeDb.Genre.FirstOrDefault(y => y.Name == x.SubGenre)?.GenreId,
+                DirectorId =  _movieTimeDb.Director.FirstOrDefault(y => y.Name == x.Director)?.DirectorId
             }));
 
-            _movieTimeDb.SaveChanges();
+            await _movieTimeDb.SaveChangesAsync();
         }
 
-        public void InsertGenres(IEnumerable<string> genres)
+        public async Task InsertGenres(IEnumerable<string> genres)
         {
             var newGenres = genres.Except(_movieTimeDb.Genre.Select(x => x.Name));
 
             _movieTimeDb.Genre.AddRange(newGenres.Select(x => new Genre { Name = x }));
-            _movieTimeDb.SaveChanges();
+            await _movieTimeDb.SaveChangesAsync();
         }
 
-        public void InsertDirectors(IEnumerable<string> directors)
+        public async Task InsertDirectors(IEnumerable<string> directors)
         {
-            var newDirectors = directors.Except(_movieTimeDb.Director.Select(x => x.Name));
+            var newDirectors = directors.Except(await _movieTimeDb.Director.Select(x => x.Name).ToListAsync());
 
             _movieTimeDb.Director.AddRange(newDirectors.Select(x => new Director { Name = x }));
-            _movieTimeDb.SaveChanges();
+            await _movieTimeDb.SaveChangesAsync();
         }
 
-        public void UpdateReview(UserReviewModel userReview)
+        public async Task UpdateReview(UserReviewModel userReview)
         {
             if(_movieTimeDb.Review.Any(x => x.User.Username == userReview.Username && x.MovieId == userReview.movie_id))
             {
-                var dbReview = _movieTimeDb.Review.FirstOrDefault(x => x.User.Username == userReview.Username && x.MovieId == userReview.movie_id);
+                var dbReview = await _movieTimeDb.Review.FirstOrDefaultAsync(x => x.User.Username == userReview.Username && x.MovieId == userReview.movie_id);
                 dbReview.Rating = userReview.Rating;
                 dbReview.ReviewText = userReview.Description;
             }
@@ -110,17 +110,18 @@ namespace MovieTime.Services
                 {
                     Rating = userReview.Rating,
                     MovieId = userReview.movie_id,
-                    UserId = _movieTimeDb.User.FirstOrDefault(x => x.Username == userReview.Username).UserId,
+                    UserId = (await _movieTimeDb.User.FirstOrDefaultAsync(x => x.Username == userReview.Username)).UserId,
                     ReviewText = userReview.Description
                 };
             }
 
-            _movieTimeDb.SaveChanges();
+            await _movieTimeDb.SaveChangesAsync();
         }
 
-        public UserReviewModel GetReview(int reviewId)
+        public async Task<UserReviewModel> GetReview(int reviewId)
         {
-            var dbReview = _movieTimeDb.Review.Include(x => x.Movie).Include(x => x.User).FirstOrDefault(x => x.ReviewId == reviewId);
+            var dbReview = await _movieTimeDb.Review.Include(x => x.Movie).Include(x => x.User).FirstOrDefaultAsync(x => x.ReviewId == reviewId);
+
             return new UserReviewModel
             {
                 Rating = dbReview.Rating,

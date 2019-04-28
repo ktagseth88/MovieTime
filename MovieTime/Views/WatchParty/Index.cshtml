@@ -19,7 +19,7 @@
                 }
             </ul>
             <a class="btn btn-primary" role="button" asp-controller="WatchParty" asp-action="Edit" asp-route-WatchPartyId="@party.WatchPartyId">Edit</a>
-            <a class="btn btn-primary" asp-controller="WatchParty" asp-action="GetMovieSuggestion" asp-route-WatchPartyId="@party.WatchPartyId">Generate Suggestion</a>
+            <button class="btn btn-primary" onclick="GetSuggestion(@party.WatchPartyId)">Generate Suggestion</button>
         </div>
     }
 </div>
@@ -30,3 +30,19 @@
     <br />
     <a asp-controller="Home" asp-action="Index">Back to List</a>
 </div>
+
+<script>
+    function GetSuggestion(watchPartyId) {
+        $.ajax({
+            type: "GET",
+            url: '@Url.Action("GetMovieSuggestion")',
+            data: {
+                WatchPartyId: watchPartyId
+            },
+            success: function (result) {
+                alert(result);
+            }
+        });
+
+    }
+</script>

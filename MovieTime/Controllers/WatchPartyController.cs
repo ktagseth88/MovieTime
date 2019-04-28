@@ -79,5 +79,12 @@ namespace MovieTime.Controllers
 
             return RedirectToAction("Index");
         }
+
+        [HttpGet]
+        public IActionResult GetMovieSuggestion(int WatchPartyId)
+        {
+            string movieSuggestion = _watchPartyService.GetMovieRecomendation(WatchPartyId);
+            return Ok(movieSuggestion);
+        }
     }
 }

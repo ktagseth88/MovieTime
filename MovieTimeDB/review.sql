@@ -4,7 +4,7 @@
 	[user_id] INT NOT NULL,
 	[movie_id] INT NOT NULL,
 	[review_text] NVARCHAR(MAX) NULL,
-	[rating] TINYINT NULL DEFAULT 0,
+	[rating] TINYINT NULL,
 	[create_timestamp] DATETIME NOT NULL DEFAULT GETDATE(),
 	[modify_timestamp] DATETIME NULL
 )

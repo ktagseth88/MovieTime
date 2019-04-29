@@ -18,15 +18,15 @@ namespace MovieTime.Services
 
         public async Task UpsertWatchList(WatchList watchList)
         {
-            var genres = watchList.Movies.Select(x => x.Movie.Genre).Concat(watchList.Movies.Select(x => x.Movie.SubGenre)).Where(x => x != null).Distinct().ToList();
+            var genres = watchList.Movies.Select(x => x.Movie.Genre.Trim()).Concat(watchList.Movies.Select(x => x.Movie.SubGenre.Trim())).Where(x => x != null).Distinct().ToList();
             await InsertGenres(genres);
 
-            var directors = watchList.Movies.Select(x => x.Movie.Director).Distinct();
+            var directors = watchList.Movies.Select(x => x.Movie.Director.Trim()).Distinct();
             await InsertDirectors(directors);
 
             await InsertMovies(watchList.Movies.Select(x => x.Movie));
 
-            var userWatchList = (await _movieTimeDb.User.FirstOrDefaultAsync(x => x.Username == watchList.UserName)).Review;
+            var userWatchList = (await _movieTimeDb.User.Include(x => x.Review).FirstOrDefaultAsync(x => x.Username == watchList.UserName)).Review.ToList();
 
             var newUserMovies = from m in watchList.Movies
                        where _movieTimeDb.Movie.Any(x => x.Director.Name == m.Movie.Director && x.Name == m.Movie.Title)
@@ -43,7 +43,9 @@ namespace MovieTime.Services
                 ReviewText = "",
                 CreateTimestamp = DateTime.Now
             });
-            
+
+            newUserReviews = newUserReviews.Where(x => !userWatchList.Select(y => y.MovieId).Contains(x.MovieId));
+
             _movieTimeDb.AddRange(newUserReviews);
             await _movieTimeDb.SaveChangesAsync();
         }
@@ -66,15 +68,15 @@ namespace MovieTime.Services
 
         public async Task InsertMovies(IEnumerable<Models.Movie> movies)
         {
-            var newMovies = movies.Where(x => !_movieTimeDb.Movie.Any(y => y.Name == x.Title && y.Director.Name == x.Director));
+            var newMovies = movies.Where(x => !_movieTimeDb.Movie.Any(y => y.Name.Trim() == x.Title.Trim() && y.Director.Name.Trim() == x.Director.Trim()));
 
             _movieTimeDb.Movie.AddRange(newMovies.Select(x => new Entities.Movie
             {
-                Name = x.Title,
+                Name = x.Title.Trim(),
                 ReleaseDate = x.ReleaseDate,
-                GenreId = _movieTimeDb.Genre.FirstOrDefault(y => y.Name == x.Genre)?.GenreId,
-                SubGenreId =  _movieTimeDb.Genre.FirstOrDefault(y => y.Name == x.SubGenre)?.GenreId,
-                DirectorId =  _movieTimeDb.Director.FirstOrDefault(y => y.Name == x.Director)?.DirectorId
+                GenreId = _movieTimeDb.Genre.FirstOrDefault(y => y.Name.Trim() == x.Genre.Trim())?.GenreId,
+                SubGenreId =  _movieTimeDb.Genre.FirstOrDefault(y => y.Name.Trim() == x.SubGenre.Trim())?.GenreId,
+                DirectorId =  _movieTimeDb.Director.FirstOrDefault(y => y.Name.Trim() == x.Director.Trim())?.DirectorId
             }));
 
             await _movieTimeDb.SaveChangesAsync();
@@ -82,6 +84,7 @@ namespace MovieTime.Services
 
         public async Task InsertGenres(IEnumerable<string> genres)
         {
+            genres = genres.Select(x => x.Trim());
             var newGenres = genres.Except(_movieTimeDb.Genre.Select(x => x.Name));
 
             _movieTimeDb.Genre.AddRange(newGenres.Select(x => new Genre { Name = x }));

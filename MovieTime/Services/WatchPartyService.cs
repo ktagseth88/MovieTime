@@ -19,20 +19,16 @@ namespace MovieTime.Services
 
         public async Task<IEnumerable<WatchPartyModel>> GetWatchPartiesByUser(string username)
         {
-            //TODO: Don't do this awful join thing, this goes around in circles with joins for no reason
-            var watchParty = (await _movieTimeDb.User
-                .Include(x => x.UserWatchPartyXref)
-                    .ThenInclude(x => x.WatchParty)
-                    .ThenInclude(x => x.UserWatchPartyXref)
-                    .ThenInclude(x => x.User)
-                .FirstOrDefaultAsync(x => x.Username == username))
-                .UserWatchPartyXref
+            var watchParty = await _movieTimeDb.WatchParty
+                .Where(x => x.UserWatchPartyXref
+                    .Select(y => y.User.Username)
+                    .Contains(username))
                 .Select(x => new WatchPartyModel
                 {
-                    PartyName = x.WatchParty.Name,
-                    Users = x.WatchParty.UserWatchPartyXref.Select(y => y.User.Username),
+                    PartyName = x.Name,
+                    Users = x.UserWatchPartyXref.Select(y => y.User.Username),
                     WatchPartyId = x.WatchPartyId
-                });
+                }).ToListAsync();
 
             return watchParty;
         }
@@ -84,22 +80,22 @@ namespace MovieTime.Services
             var weightedMovieTitles = new List<string>();
 
             var watchListMovies = await (from uwpx in _movieTimeDb.UserWatchPartyXref
-                       join u in _movieTimeDb.User on uwpx.UserId equals u.UserId
-                       join rl in _movieTimeDb.Review on u.UserId equals rl.UserId
-                       where uwpx.WatchPartyId == WatchPartyId
-                       select new { user = u.Username, title = rl.Movie.Name, rating = rl.Rating }).ToListAsync();
-            
+                                         join u in _movieTimeDb.User on uwpx.UserId equals u.UserId
+                                         join rl in _movieTimeDb.Review on u.UserId equals rl.UserId
+                                         where uwpx.WatchPartyId == WatchPartyId
+                                         select new { user = u.Username, title = rl.Movie.Name, rating = rl.Rating }).ToListAsync();
+
             foreach (var m in watchListMovies)
             {
                 weightedMovieTitles.Add(m.title);
-                if(!m.rating.HasValue)
+                if (!m.rating.HasValue)
                 {
                     weightedMovieTitles.AddRange(new[] { m.title, m.title });
                 }
             }
 
             var groupedWatchListMovies = watchListMovies.GroupBy(x => x.title).Where(x => x.Count() > 1);
-            foreach(var x in groupedWatchListMovies)
+            foreach (var x in groupedWatchListMovies)
             {
                 weightedMovieTitles.AddRange(Enumerable.Repeat(x.First().title, x.Count()));
             }
@@ -111,7 +107,7 @@ namespace MovieTime.Services
 
         public async Task<WatchPartyModel> GetWatchPartyById(int watchPartyId)
         {
-            var watchPartyModel = await  _movieTimeDb.WatchParty.Where(x => x.WatchPartyId == watchPartyId).Select(x => new WatchPartyModel
+            var watchPartyModel = await _movieTimeDb.WatchParty.Where(x => x.WatchPartyId == watchPartyId).Select(x => new WatchPartyModel
             {
                 PartyName = x.Name,
                 Users = x.UserWatchPartyXref.Select(y => y.User.Username),

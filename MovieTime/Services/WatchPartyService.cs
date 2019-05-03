@@ -99,10 +99,8 @@ namespace MovieTime.Services
             {
                 weightedMovieTitles.AddRange(Enumerable.Repeat(x.First().title, x.Count()));
             }
-            Random randomGenerator = new Random();
 
-            var selectedMovie = weightedMovieTitles.ElementAt(randomGenerator.Next(weightedMovieTitles.Count() - 1));
-            return selectedMovie;
+            return weightedMovieTitles.ElementAt(new Random().Next(weightedMovieTitles.Count() - 1));
         }
 
         public async Task<WatchPartyModel> GetWatchPartyById(int watchPartyId)

@@ -1,0 +1,22 @@
+{
+  "name": "movietime",
+  "version": "0.0.1",
+  "description": "",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ktagseth88/MovieTime.git"
+  },
+  "author": "Keaton Tagseth",
+  "license": "NONE",
+  "bugs": {
+    "url": "https://github.com/ktagseth88/MovieTime/issues"
+  },
+  "homepage": "https://github.com/ktagseth88/MovieTime#readme",
+  "devDependencies": {
+    "gulp": "^4.0.1",
+    "gulp-sass": "^4.0.2"
+  }
+}

@@ -74,9 +74,9 @@ namespace MovieTime.Services
             {
                 Name = x.Title.Trim(),
                 ReleaseDate = x.ReleaseDate,
-                GenreId = _movieTimeDb.Genre.FirstOrDefault(y => y.Name.Trim() == x.Genre.Trim())?.GenreId,
-                SubGenreId =  _movieTimeDb.Genre.FirstOrDefault(y => y.Name.Trim() == x.SubGenre.Trim())?.GenreId,
-                DirectorId =  _movieTimeDb.Director.FirstOrDefault(y => y.Name.Trim() == x.Director.Trim())?.DirectorId
+                GenreId = _movieTimeDb.Genre.FirstOrDefault(y => y.Name == x.Genre)?.GenreId,
+                SubGenreId =  _movieTimeDb.Genre.FirstOrDefault(y => y.Name == x.SubGenre)?.GenreId,
+                DirectorId =  _movieTimeDb.Director.FirstOrDefault(y => y.Name == x.Director)?.DirectorId
             }));
 
             await _movieTimeDb.SaveChangesAsync();

@@ -18,7 +18,7 @@ namespace MovieTime.Services
 
         public async Task UpsertWatchList(WatchList watchList)
         {
-            var genres = watchList.Movies.Select(x => x.Movie.Genre.Trim()).Concat(watchList.Movies.Select(x => x.Movie.SubGenre.Trim())).Where(x => x != null).Distinct().ToList();
+            var genres = watchList.Movies.Select(x => x.Movie.Genre?.Trim()).Concat(watchList.Movies.Select(x => x.Movie.SubGenre?.Trim())).Where(x => x != null).Distinct().ToList();
             await InsertGenres(genres);
 
             var directors = watchList.Movies.Select(x => x.Movie.Director.Trim()).Distinct();

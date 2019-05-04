@@ -29,8 +29,8 @@ namespace MovieTime.Services
             var userWatchList = (await _movieTimeDb.User.Include(x => x.Review).FirstOrDefaultAsync(x => x.Username == watchList.UserName)).Review.ToList();
 
             var newUserMovies = from m in watchList.Movies
-                       where _movieTimeDb.Movie.Any(x => x.Director.Name == m.Movie.Director && x.Name == m.Movie.Title)
-                       select m;
+                                where _movieTimeDb.Movie.Any(x => x.Director.Name == m.Movie.Director && x.Name == m.Movie.Title)
+                                select m;
 
             var user = await _movieTimeDb.User.FirstOrDefaultAsync(x => x.Username == watchList.UserName);
 

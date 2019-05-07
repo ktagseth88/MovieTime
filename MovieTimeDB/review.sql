@@ -10,6 +10,12 @@
 )
 GO
 
+CREATE NONCLUSTERED INDEX ix_review_user_id on [dbo].[review] (user_id)
+GO
+
+CREATE NONCLUSTERED INDEX ix_review_movie_id on [dbo].[review] (movie_id)
+GO
+
 ALTER TABLE [dbo].[review]
 ADD CONSTRAINT FK_review_to_user FOREIGN KEY ([user_id]) REFERENCES [dbo].[user]([user_id])
 GO

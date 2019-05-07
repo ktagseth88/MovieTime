@@ -5,3 +5,4 @@
 	[password_hash] NVARCHAR(MAX) NOT NULL,
 	[create_timestamp] DATETIME NOT NULL DEFAULT GETDATE()
 )
+GO

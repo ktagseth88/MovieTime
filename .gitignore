@@ -275,3 +275,5 @@ __pycache__/
 # End of https://www.gitignore.io/api/aspnetcore
 
 MovieTime/wwwroot/css/main.css
+
+MovieTime/wwwroot/lib

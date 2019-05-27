@@ -18,5 +18,8 @@
   "devDependencies": {
     "gulp": "^4.0.1",
     "gulp-sass": "^4.0.2"
+  },
+  "dependencies": {
+    "tinymce": "^5.0.6"
   }
 }

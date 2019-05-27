@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace MovieTime.Models
 {
-    public class WatchPartyModel
+    public class WatchParty
     {
         public int? WatchPartyId { get; set; }
         public string PartyName { get; set; }

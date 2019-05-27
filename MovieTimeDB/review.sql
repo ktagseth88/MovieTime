@@ -6,7 +6,8 @@
 	[review_text] NVARCHAR(MAX) NULL,
 	[rating] TINYINT NULL,
 	[create_timestamp] DATETIME NOT NULL DEFAULT GETDATE(),
-	[modify_timestamp] DATETIME NULL
+	[modify_timestamp] DATETIME NULL,
+	[rewatch] BIT NULL
 )
 GO
 

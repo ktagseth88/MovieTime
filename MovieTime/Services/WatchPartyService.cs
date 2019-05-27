@@ -17,13 +17,13 @@ namespace MovieTime.Services
             _movieTimeDb = movieTimeDb;
         }
 
-        public async Task<IEnumerable<WatchPartyModel>> GetWatchPartiesByUser(string username)
+        public async Task<IEnumerable<Models.WatchParty>> GetWatchPartiesByUser(string username)
         {
             var watchParty = await _movieTimeDb.WatchParty
                 .Where(x => x.UserWatchPartyXref
                     .Select(y => y.User.Username)
                     .Contains(username))
-                .Select(x => new WatchPartyModel
+                .Select(x => new Models.WatchParty
                 {
                     PartyName = x.Name,
                     Users = x.UserWatchPartyXref.Select(y => y.User.Username),
@@ -33,11 +33,11 @@ namespace MovieTime.Services
             return watchParty;
         }
 
-        public async Task UpdateWatchParty(WatchPartyModel watchParty)
+        public async Task UpdateWatchParty(Models.WatchParty watchParty)
         {
             var existingWatchPartyEntity = await _movieTimeDb.WatchParty.FirstOrDefaultAsync(x => x.WatchPartyId == watchParty.WatchPartyId);
 
-            var updatedWatchPartyEntity = new WatchParty
+            var updatedWatchPartyEntity = new Entities.WatchParty
             {
                 Name = watchParty.PartyName,
                 UserWatchPartyXref = watchParty.Users.Select(x => new UserWatchPartyXref
@@ -52,9 +52,9 @@ namespace MovieTime.Services
             await _movieTimeDb.SaveChangesAsync();
         }
 
-        public async Task InsertWatchParty(WatchPartyModel watchParty)
+        public async Task InsertWatchParty(Models.WatchParty watchParty)
         {
-            var watchPartyEntity = new WatchParty
+            var watchPartyEntity = new Entities.WatchParty
             {
                 Name = watchParty.PartyName
             };
@@ -103,9 +103,9 @@ namespace MovieTime.Services
             return weightedMovieTitles.ElementAt(new Random().Next(weightedMovieTitles.Count() - 1));
         }
 
-        public async Task<WatchPartyModel> GetWatchPartyById(int watchPartyId)
+        public async Task<Models.WatchParty> GetWatchPartyById(int watchPartyId)
         {
-            var watchPartyModel = await _movieTimeDb.WatchParty.Where(x => x.WatchPartyId == watchPartyId).Select(x => new WatchPartyModel
+            var watchPartyModel = await _movieTimeDb.WatchParty.Where(x => x.WatchPartyId == watchPartyId).Select(x => new Models.WatchParty
             {
                 PartyName = x.Name,
                 Users = x.UserWatchPartyXref.Select(y => y.User.Username),

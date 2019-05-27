@@ -61,7 +61,7 @@ namespace MovieTime.Controllers
         [HttpPost]
         public async Task<IActionResult> Edit(WatchPartyViewModel watchParty)
         {
-            var model = new WatchPartyModel
+            var model = new WatchParty
             {
                 Users = watchParty.Users,
                 PartyName = watchParty.Name,

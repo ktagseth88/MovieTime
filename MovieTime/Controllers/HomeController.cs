@@ -76,10 +76,11 @@ namespace MovieTime.Controllers
 
             var reviewViewModel = new UserReviewViewModel
             {
-                MovieId = reviewModel.movie_id,
+                MovieId = reviewModel.MovieId,
                 MovieName = reviewModel.MovieTitle,
                 Rating = reviewModel.Rating,
-                ReviewText = reviewModel.Description
+                ReviewText = reviewModel.Description,
+                WouldRewatch = reviewModel.WouldRewatch.GetValueOrDefault()
             };
             return View(reviewViewModel);
         }
@@ -87,13 +88,14 @@ namespace MovieTime.Controllers
         [HttpPost]
         public async Task<IActionResult> EditUserReview(UserReviewViewModel reviewViewModel)
         {
-            var reviewModel = new UserReviewModel
+            var reviewModel = new UserReview
             {
-                movie_id = reviewViewModel.MovieId,
+                MovieId = reviewViewModel.MovieId,
                 Description = reviewViewModel.ReviewText,
                 Rating = reviewViewModel.Rating,
                 Username = HttpContext.User.Identity.Name,
-                MovieTitle = reviewViewModel.MovieName
+                MovieTitle = reviewViewModel.MovieName,
+                WouldRewatch = reviewViewModel.WouldRewatch
             };
 
             await _watchListService.UpdateReview(reviewModel);

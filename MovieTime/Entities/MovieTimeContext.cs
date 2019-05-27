@@ -109,6 +109,8 @@ namespace MovieTime.Entities
 
                 entity.Property(e => e.UserId).HasColumnName("user_id");
 
+                entity.Property(e => e.Rewatch).HasColumnName("rewatch");
+
                 entity.HasOne(d => d.Movie)
                     .WithMany(p => p.Review)
                     .HasForeignKey(d => d.MovieId)

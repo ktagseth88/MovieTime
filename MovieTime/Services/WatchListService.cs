@@ -31,7 +31,6 @@ namespace MovieTime.Services
 
             await InsertMovies(watchList.Movies.Select(x => x.Movie));
 
-            var userWatchList = (await _movieTimeDb.User.Include(x => x.Review).FirstOrDefaultAsync(x => x.Username == watchList.UserName)).Review.ToList();
 
             var newUserMovies = from m in watchList.Movies
                                 where _movieTimeDb.Movie.Any(x => x.Director.Name == m.Movie.Director && x.Name == m.Movie.Title)
@@ -49,6 +48,7 @@ namespace MovieTime.Services
                 CreateTimestamp = DateTime.Now
             });
 
+            var userWatchList = (await _movieTimeDb.User.Include(x => x.Review).FirstOrDefaultAsync(x => x.Username == watchList.UserName)).Review.ToList();
             newUserReviews = newUserReviews.Where(x => !userWatchList.Select(y => y.MovieId).Contains(x.MovieId));
 
             _movieTimeDb.AddRange(newUserReviews);
@@ -138,7 +138,8 @@ namespace MovieTime.Services
                 Description = dbReview.ReviewText,
                 Username = dbReview.User.Username,
                 MovieId = dbReview.MovieId,
-                MovieTitle = dbReview.Movie.Name
+                MovieTitle = dbReview.Movie.Name,
+                WouldRewatch = dbReview.Rewatch
             };
         }
     }

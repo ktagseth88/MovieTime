@@ -1,9 +1,9 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.27703.2042
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.28803.352
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MovieTime", "MovieTime\MovieTime.csproj", "{3AA55CDF-9B59-4AF8-9C0C-B9112B18E811}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MovieTime", "MovieTime\MovieTime.csproj", "{3AA55CDF-9B59-4AF8-9C0C-B9112B18E811}"
 EndProject
 Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "MovieTimeDB", "MovieTimeDB\MovieTimeDB.sqlproj", "{55AD1525-6C9F-4B3D-A48C-3271E42688A5}"
 EndProject

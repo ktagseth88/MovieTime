@@ -31,7 +31,6 @@ namespace MovieTime.Services
 
             await InsertMovies(watchList.Movies.Select(x => x.Movie));
 
-
             var newUserMovies = from m in watchList.Movies
                                 where _movieTimeDb.Movie.Any(x => x.Director.Name == m.Movie.Director && x.Name == m.Movie.Title)
                                 select m;
@@ -45,7 +44,8 @@ namespace MovieTime.Services
                 MovieId =  _movieTimeDb.Movie.FirstOrDefault(y => y.Name == x.Movie.Title && y.Director.Name == x.Movie.Director).MovieId,
                 Rating = x.Rating,
                 ReviewText = "",
-                CreateTimestamp = DateTime.Now
+                CreateTimestamp = DateTime.Now,
+                //Rewatch = x.Rating != null ? (x.Rating >= 8) : (bool?)null
             });
 
             var userWatchList = (await _movieTimeDb.User.Include(x => x.Review).FirstOrDefaultAsync(x => x.Username == watchList.UserName)).Review.ToList();

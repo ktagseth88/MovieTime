@@ -87,10 +87,10 @@ namespace MovieTime.Services
 
             foreach (var m in watchListMovies)
             {
-                weightedMovieTitles.Add(m.title);
+                //weightedMovieTitles.Add(m.title);
                 if (!m.rating.HasValue)
                 {
-                    weightedMovieTitles.AddRange(new[] { m.title, m.title });
+                    weightedMovieTitles.AddRange(new[] { m.title, m.title, m.title });
                 }
             }
 

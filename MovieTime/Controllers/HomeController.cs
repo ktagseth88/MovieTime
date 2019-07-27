@@ -43,12 +43,12 @@ namespace MovieTime.Controllers
         {
             var contents = new List<WatchListUpload>();
 
-            using(var reader = new StreamReader(watchlistEntry.OpenReadStream(), System.Text.Encoding.UTF8))
+            using (var reader = new StreamReader(watchlistEntry.OpenReadStream(), System.Text.Encoding.GetEncoding(1252)))
             {
                 //fileContents = await reader.ReadToEndAsync();
                 var csvReader = new CsvReader(reader);
                 csvReader.Configuration.RegisterClassMap<WatchListUploadMap>();
-                contents = csvReader.GetRecords<WatchListUpload>().ToList() ;
+                contents = csvReader.GetRecords<WatchListUpload>().ToList();
             }
 
             var watchlist = new WatchList

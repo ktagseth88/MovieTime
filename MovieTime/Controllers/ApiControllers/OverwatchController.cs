@@ -23,7 +23,28 @@ namespace MovieTime.Controllers.ApiControllers
         [Route("Matches")]
         public ActionResult<IEnumerable<Match>> GetMatchHistory()
         {
-            return  Ok(_matchService.GetAllMatches());
+            return Ok(_matchService.GetAllMatches());
+        }
+
+        [HttpGet]
+        [Route("Players/RoleSummaries")]
+        public ActionResult<IEnumerable<Models.ApiModels.PlayerRoleRecord>> GetPlayerRoleSummaries()
+        {
+            return Ok(_matchService.GetPlayerRoleRecords());
+        }
+
+        [HttpGet]
+        [Route("Players/{playerIdentifier}/RoleSummaries")]
+        public ActionResult<IEnumerable<Models.ApiModels.PlayerRoleRecord>> GetPlayerRoleSummaries(string playerIdentifier)
+        {
+            try
+            {
+                return Ok(_matchService.GetPlayerRoleRecords(playerIdentifier));
+            }
+            catch
+            {
+                return NotFound(playerIdentifier);
+            }
         }
     }
 }

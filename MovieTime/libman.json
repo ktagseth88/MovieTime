@@ -4,7 +4,7 @@
   "libraries": [
     {
       "library": "tinymce@5.0.6",
-      "destination": "wwwroot/lib/tinymce/"
+      "destination": "wwwroot/lib/tinymce/",
       "library": "datatables@1.10.19",
       "destination": "wwwroot/lib/datatables/"
     }

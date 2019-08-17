@@ -41,9 +41,9 @@ namespace MovieTime.Controllers.ApiControllers
             {
                 return Ok(_matchService.GetPlayerRoleRecords(playerIdentifier));
             }
-            catch
+            catch(Exception e)
             {
-                return NotFound(playerIdentifier);
+                return NotFound(e.Message);
             }
         }
     }

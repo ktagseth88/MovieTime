@@ -11,7 +11,7 @@ using MovieTime.ViewModels.Overwatch;
 
 namespace MovieTime.Controllers
 {
-    [AllowAnonymous]
+    [Authorize]
     public class OverwatchController : Controller
     {
         private readonly OverwatchContext _overwatchDb;

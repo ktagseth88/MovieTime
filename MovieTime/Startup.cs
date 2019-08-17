@@ -33,15 +33,15 @@ namespace MovieTime
             services.AddDbContext<MovieTimeContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("MovieTimeContext")));
 
+            services.AddDbContext<OverwatchContext>(options =>
+                options.UseSqlServer(Configuration.GetConnectionString("MovieTimeContext")));
             services.AddDbContext<OverwatchContextBase>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("MovieTimeContext")));
 
             services.AddScoped<AccountService>();
             services.AddScoped<MovieService>();
             services.AddScoped<WatchPartyService>();
-            services.AddTransient<MatchService>();
-
-            
+            services.AddTransient<MatchService>(); 
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

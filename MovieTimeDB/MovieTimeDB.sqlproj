@@ -58,6 +58,7 @@
   <ItemGroup>
     <Folder Include="Properties" />
     <Folder Include="overwatch-stats" />
+    <Folder Include="overwatch-stats\Views" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="user.sql" />
@@ -73,5 +74,6 @@
     <Build Include="overwatch-stats\match.sql" />
     <Build Include="overwatch-stats\player.sql" />
     <Build Include="overwatch-stats\player_match_xref.sql" />
+    <Build Include="overwatch-stats\Views\v_player_role_record.sql" />
   </ItemGroup>
 </Project>

@@ -33,13 +33,15 @@ namespace MovieTime
             services.AddDbContext<MovieTimeContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("MovieTimeContext")));
 
-            services.AddDbContext<OverwatchContext>(options =>
+            services.AddDbContext<OverwatchContextBase>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("MovieTimeContext")));
 
             services.AddScoped<AccountService>();
             services.AddScoped<MovieService>();
             services.AddScoped<WatchPartyService>();
             services.AddTransient<MatchService>();
+
+            
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -58,6 +60,10 @@ namespace MovieTime
             }
 
             app.UseStaticFiles();
+
+            app.UseCors(options => {
+                options.AllowAnyOrigin();
+            });
 
             app.UseMvc(routes =>
             {

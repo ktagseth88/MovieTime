@@ -7,6 +7,7 @@ using Microsoft.Extensions.DependencyInjection;
 using MovieTime.Entities;
 using MovieTime.Entities.Overwatch;
 using MovieTime.Services;
+using MovieTime.Services.Overwatch;
 
 namespace MovieTime
 {
@@ -38,6 +39,7 @@ namespace MovieTime
             services.AddScoped<AccountService>();
             services.AddScoped<MovieService>();
             services.AddScoped<WatchPartyService>();
+            services.AddTransient<MatchService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

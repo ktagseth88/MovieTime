@@ -23,25 +23,25 @@ namespace MovieTime.Controllers
         public IActionResult Index()
         {
 
-            var oujouh = _overwatchDb.Match
+            var matchEntities = _overwatchDb.Match
                 .Include(x => x.PlayerMatchXref)
                     .ThenInclude(x => x.Player)
                 .Include(x => x.Map)
                 .ToList();
 
-            var ooo = new List<MatchHistoryViewModel>();
-            foreach(var k in oujouh)
+            var matchHistory = new List<MatchHistoryViewModel>();
+            foreach(var match in matchEntities)
             {
-                ooo.Add(new MatchHistoryViewModel
+                matchHistory.Add(new MatchHistoryViewModel
                 {
-                    MapName = k.Map.Name,
-                    IsVictory = k.Victory,
-                    EndTime = k.Timestamp,
-                    PlayerRole = k.PlayerMatchXref.ToDictionary(x => x.Player.Name, x => x.Role)
+                    MapName = match.Map.Name,
+                    IsVictory = match.Victory,
+                    EndTime = match.Timestamp,
+                    PlayerRole = match.PlayerMatchXref.ToDictionary(x => x.Player.Name, x => x.Role)
                 });
             }
 
-            return View(ooo);
+            return View(matchHistory);
         }
 
         [HttpGet]
@@ -53,7 +53,7 @@ namespace MovieTime.Controllers
                     Value = x.PlayerId.ToString(),
                     Text = x.Name
                 }).ToList();
-            playerSelectList.Add(new SelectListItem { Text = "n/a", Value = "-1" });
+            playerSelectList.Add(new SelectListItem { Text = "n/a", Value = "-1", Selected = true });
             var mapSelectList = _overwatchDb.Map
                 .Select(x => new SelectListItem
                 {

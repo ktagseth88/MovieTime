@@ -57,6 +57,7 @@
   <Import Condition="'$(SQLDBExtensionsRefPath)' == ''" Project="$(MSBuildExtensionsPath)\Microsoft\VisualStudio\v$(VisualStudioVersion)\SSDT\Microsoft.Data.Tools.Schema.SqlTasks.targets" />
   <ItemGroup>
     <Folder Include="Properties" />
+    <Folder Include="overwatch-stats" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="user.sql" />
@@ -66,5 +67,11 @@
     <Build Include="director.sql" />
     <Build Include="watch_party.sql" />
     <Build Include="user_watch_party_xref.sql" />
+    <Build Include="overwatch-stats\overwatch.sql" />
+    <Build Include="overwatch-stats\map.sql" />
+    <Build Include="overwatch-stats\map_type.sql" />
+    <Build Include="overwatch-stats\match.sql" />
+    <Build Include="overwatch-stats\player.sql" />
+    <Build Include="overwatch-stats\player_match_xref.sql" />
   </ItemGroup>
 </Project>

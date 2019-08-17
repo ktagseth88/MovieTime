@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using MovieTime.Entities;
+using MovieTime.Entities.Overwatch;
 using MovieTime.Services;
 
 namespace MovieTime
@@ -29,6 +30,9 @@ namespace MovieTime
 
             services.AddMvc();
             services.AddDbContext<MovieTimeContext>(options =>
+                options.UseSqlServer(Configuration.GetConnectionString("MovieTimeContext")));
+
+            services.AddDbContext<OverwatchContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("MovieTimeContext")));
 
             services.AddScoped<AccountService>();

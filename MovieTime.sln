@@ -7,9 +7,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MovieTime", "MovieTime\Movi
 EndProject
 Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "MovieTimeDB", "MovieTimeDB\MovieTimeDB.sqlproj", "{55AD1525-6C9F-4B3D-A48C-3271E42688A5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MovieTime.DAL", "MovieTime.DAL\MovieTime.DAL.csproj", "{9E62B820-3BF5-4A82-8A94-D9F0CAC9ADB5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MovieTime.DAL", "MovieTime.DAL\MovieTime.DAL.csproj", "{9E62B820-3BF5-4A82-8A94-D9F0CAC9ADB5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MovieTime.Common", "MovieTime.Common\MovieTime.Common.csproj", "{5F7903A6-C9F0-4749-BDC9-DD995201BE3B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MovieTime.Common", "MovieTime.Common\MovieTime.Common.csproj", "{5F7903A6-C9F0-4749-BDC9-DD995201BE3B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

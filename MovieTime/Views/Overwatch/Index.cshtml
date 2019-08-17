@@ -1,0 +1,53 @@
+﻿@model IEnumerable<MovieTime.ViewModels.Overwatch.MatchHistoryViewModel>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h2>History</h2>
+
+<table id="historyTable" class="table table-striped dataTable">
+    <thead>
+        <tr>
+            <th>
+                Win
+            </th>
+            <th>
+                Map
+            </th>
+            <th>
+                Match Time
+            </th>
+            <th>
+                players
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.IsVictory)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.MapName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.EndTime.Value)
+            </td>
+            <td>
+                @Html.DisplayFor(x => item.PlayerSummary)
+            </td>
+        </tr>
+        }
+    </tbody>
+</table>
+
+
+@section Scripts {
+    <script>
+        $('#historyTable').dataTable({
+        });
+    </script>
+}

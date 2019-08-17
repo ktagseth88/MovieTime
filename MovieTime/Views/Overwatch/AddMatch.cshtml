@@ -1,0 +1,77 @@
+﻿@model MovieTime.ViewModels.Overwatch.CreateMatchViewModel
+
+@{
+    ViewData["Title"] = "AddMatch";
+}
+
+<h2>AddMatch</h2>
+
+<h4>CreateMatchViewModel</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="AddMatch">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <div class="checkbox">
+                    <label>
+                        <input asp-for="IsVictory" /> @Html.DisplayNameFor(model => model.IsVictory)
+                    </label>
+                </div>
+                <div class="dropdown">
+                    <label>
+                        Map:
+                    </label>
+                    @Html.DropDownListFor(model => model.MapId, Model.Map)
+                </div>
+                <div class="dropdown">
+                    <label>
+                        Dps
+                    </label>
+                    @Html.DropDownListFor(model => model.FirstDpsId, Model.FirstDps)
+                </div>
+                <div class="dropdown">
+                    <label>
+                        Dps
+                    </label>
+                    @Html.DropDownListFor(model => model.SecondDpsId, Model.SecondDps)
+                </div>
+                <div class="dropdown">
+                    <label>
+                        Healer
+                    </label>
+                    @Html.DropDownListFor(model => model.FirstHealerId, Model.FirstHealer)
+                </div>
+                <div class="dropdown">
+                    <label>
+                        Healer
+                    </label>
+                    @Html.DropDownListFor(model => model.SecondHealerId, Model.SecondHealer)
+                </div>
+                <div class="dropdown">
+                    <label>
+                        Tank
+                    </label>
+                    @Html.DropDownListFor(model => model.FirstTankId, Model.FirstTank)
+                </div>
+                <div class="dropdown">
+                    <label>
+                        Tank
+                    </label>
+                    @Html.DropDownListFor(model => model.SecondTankId, Model.SecondTank)
+                </div>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-default" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

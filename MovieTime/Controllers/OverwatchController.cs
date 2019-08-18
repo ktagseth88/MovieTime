@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using MovieTime.Entities.Overwatch;
+using MovieTime.Models;
 using MovieTime.Services.Overwatch;
 using MovieTime.ViewModels.Overwatch;
 
@@ -25,7 +26,6 @@ namespace MovieTime.Controllers
 
         public IActionResult Index()
         {
-
             var matchEntities = _overwatchDb.Match
                 .Include(x => x.PlayerMatchXref)
                     .ThenInclude(x => x.Player)
@@ -81,6 +81,11 @@ namespace MovieTime.Controllers
         [HttpPost]
         public IActionResult AddMatch(CreateMatchViewModel match)
         {
+            if (MatchContainsDuplicatePlayers(match))
+            {
+                return View("Error", new ErrorViewModel { Message = "Cannot contain duplicate players" });
+            }
+
             var newMatch = new Match
             {
                 MapId = int.Parse(match.MapId),
@@ -88,7 +93,6 @@ namespace MovieTime.Controllers
             };
             _overwatchDb.Match.Add(newMatch);
             _overwatchDb.SaveChanges();
-
 
             if (match.FirstDpsId != "-1")
             {
@@ -148,6 +152,23 @@ namespace MovieTime.Controllers
             _overwatchDb.SaveChanges();
 
             return RedirectToAction("Index");
+        }
+
+        private bool MatchContainsDuplicatePlayers(CreateMatchViewModel match)
+        {
+            var playerIds = new List<string>
+            {
+                match.FirstDpsId,
+                match.SecondDpsId,
+                match.FirstHealerId,
+                match.SecondHealerId,
+                match.FirstTankId,
+                match.SecondTankId
+            };
+
+            var playerCounter = playerIds.Where(x => x != "-1").Count();
+
+            return playerCounter != (playerIds.Distinct().Count() - 1);
         }
 
         [HttpGet]

@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using MovieTime.Entities.Overwatch;
+using MovieTime.Services.Overwatch;
 using MovieTime.ViewModels.Overwatch;
 
 namespace MovieTime.Controllers
@@ -15,9 +16,11 @@ namespace MovieTime.Controllers
     public class OverwatchController : Controller
     {
         private readonly OverwatchContext _overwatchDb;
-        public OverwatchController(OverwatchContext overWatchDb)
+        private readonly MatchService _matchService;
+        public OverwatchController(OverwatchContext overWatchDb, MatchService matchService)
         {
             _overwatchDb = overWatchDb;
+            _matchService = matchService;
         }
 
         public IActionResult Index()
@@ -30,7 +33,7 @@ namespace MovieTime.Controllers
                 .ToList();
 
             var matchHistory = new List<MatchHistoryViewModel>();
-            foreach(var match in matchEntities)
+            foreach (var match in matchEntities)
             {
                 matchHistory.Add(new MatchHistoryViewModel
                 {
@@ -87,7 +90,7 @@ namespace MovieTime.Controllers
             _overwatchDb.SaveChanges();
 
 
-            if(match.FirstDpsId != "-1")
+            if (match.FirstDpsId != "-1")
             {
                 _overwatchDb.Add(new PlayerMatchXref
                 {
@@ -145,6 +148,64 @@ namespace MovieTime.Controllers
             _overwatchDb.SaveChanges();
 
             return RedirectToAction("Index");
+        }
+
+        [HttpGet]
+        public IActionResult PlayerRoleStats(string playerIdentifier = null)
+        {
+            if (playerIdentifier != null)
+            {
+                return GetRoleStatsForPlayer(playerIdentifier);
+            }
+            var roleRecords = _matchService.GetPlayerRoleRecords();
+
+            var viewModels = roleRecords.Select(x => new PlayerRoleStatsViewModel
+            {
+                PlayerId = x.PlayerId,
+                PlayerName = x.PlayerName,
+                Losses = x.Losses,
+                Wins = x.Wins,
+                Role = x.Role
+            });
+
+            ViewBag.PlayerSelectList = _overwatchDb.Player.Select(x => new SelectListItem
+            {
+                Value = x.PlayerId.ToString(),
+                Text = x.Name
+            }).ToList();
+
+            ViewBag.PlayerSelectList.Add(new SelectListItem
+            {
+                Value = "All",
+                Selected = true,
+                Text = "All"
+            });
+
+            return View(viewModels);
+        }
+
+        private IActionResult GetRoleStatsForPlayer(string playerIdentifier)
+        {
+            var roleRecords = new List<Models.ApiModels.PlayerRoleRecord>();
+            if (playerIdentifier == "All")
+            {
+                roleRecords = _matchService.GetPlayerRoleRecords().ToList();
+            }
+            else
+            {
+                roleRecords = _matchService.GetPlayerRoleRecords(playerIdentifier).ToList();
+            }
+
+            var viewModels = roleRecords.Select(x => new PlayerRoleStatsViewModel
+            {
+                PlayerId = x.PlayerId,
+                PlayerName = x.PlayerName,
+                Losses = x.Losses,
+                Wins = x.Wins,
+                Role = x.Role
+            });
+
+            return PartialView("_playerRoleStatsTable", viewModels);
         }
     }
 }

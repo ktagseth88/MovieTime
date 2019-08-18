@@ -1,0 +1,39 @@
+﻿@model IEnumerable<MovieTime.ViewModels.Overwatch.PlayerRoleStatsViewModel>
+
+<table id="roleStatsTable" class="table table-striped dataTable">
+    <thead>
+        <tr>
+            <th>
+                Player
+            </th>
+            <th>
+                Role
+            </th>
+            <th>
+                Wins
+            </th>
+            <th>
+                Losses
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.PlayerName)
+            </td>
+            <td>
+                @Html.DisplayFor(x => item.Role)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Wins)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Losses)
+            </td>
+        </tr>
+        }
+    </tbody>
+</table>

@@ -1,0 +1,56 @@
+﻿@model IEnumerable<MovieTime.ViewModels.Overwatch.PlayerRoleStatsViewModel>
+@{
+    ViewData["Title"] = "PlayerRoleStats";
+}
+
+
+
+<div class="row">
+    <h2 class="col-md-2">
+        Base stats
+    </h2>
+    <div class="col-md-8 text-right pull-right">
+        <br />
+        <label>
+            Player: 
+        </label>
+        <div class="col-md-6 pull-right">
+            <div class="col-md-8">
+                <select id="playerSelectList" class="form-control col-md-12" asp-items="ViewBag.PlayerSelectList">
+                </select>
+            </div>
+            <button id="submitPlayer" class="btn btn-primary">Update</button>
+        </div>
+    </div>
+</div>
+
+<br />
+<div class="row">
+    <div id="roleStatsDiv">
+        @await Html.PartialAsync("_playerRoleStatsTable")
+    </div>
+</div>
+
+
+
+
+@section Scripts {
+    <script>
+        $('#roleStatsTable').dataTable({
+        });
+    </script>
+
+    <script>
+        $("#submitPlayer").click(function () {
+            $('#roleStatsDiv').empty();
+            $.ajax({
+                url: 'PlayerRoleStats?playerIdentifier=' + $('#playerSelectList').val(),
+                success: function (result) {
+                    $('#roleStatsDiv').html(result);
+                    //$('#roleStatsTable').dataTable({
+                    //});
+                }
+            })
+        })
+    </script>
+}

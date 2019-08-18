@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.SpaServices.AngularCli;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -25,7 +26,8 @@ namespace MovieTime
         {
             services.AddAuthentication(
                 CookieAuthenticationDefaults.AuthenticationScheme
-            ).AddCookie(options => {
+            ).AddCookie(options =>
+            {
                 options.LoginPath = "/Account/Login/";
             });
 
@@ -41,7 +43,7 @@ namespace MovieTime
             services.AddScoped<AccountService>();
             services.AddScoped<MovieService>();
             services.AddScoped<WatchPartyService>();
-            services.AddTransient<MatchService>(); 
+            services.AddTransient<MatchService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -61,7 +63,8 @@ namespace MovieTime
 
             app.UseStaticFiles();
 
-            app.UseCors(options => {
+            app.UseCors(options =>
+            {
                 options.AllowAnyOrigin();
             });
 
@@ -70,6 +73,17 @@ namespace MovieTime
                 routes.MapRoute(
                     name: "default",
                     template: "{controller=Account}/{action=Login}");
+
+                routes.MapRoute(
+                    "angular",
+                    "angular/{*url}",
+                    new { controller = "Angular", action = "Start" });
+            });
+
+            app.UseSpa(spa =>
+            {
+                spa.Options.SourcePath = "Angular";
+                spa.UseAngularCliServer(npmScript: "start");
             });
         }
     }

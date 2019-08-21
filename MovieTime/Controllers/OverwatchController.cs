@@ -62,7 +62,7 @@ namespace MovieTime.Controllers
                 {
                     Value = x.MapId.ToString(),
                     Text = x.Name
-                });
+                }).OrderBy(x => x.Text);
 
             var mmm = new CreateMatchViewModel
             {

@@ -19,7 +19,7 @@ namespace MovieTime.Services
 
         public async Task<IEnumerable<Models.WatchParty>> GetWatchPartiesByUser(string username)
         {
-            var watchParty = await _movieTimeDb.WatchParty
+            var watchParty = await _movieTimeDb.WatchParty.AsNoTracking()
                 .Where(x => x.UserWatchPartyXref
                     .Select(y => y.User.Username)
                     .Contains(username))
@@ -62,7 +62,6 @@ namespace MovieTime.Services
             await _movieTimeDb.AddAsync(watchPartyEntity);
             await _movieTimeDb.SaveChangesAsync();//Have to make intermittent save to apply watch_party_id to new watch party
 
-            //TODO: make these horrible fucking lambda variable names not awful
             foreach (var u in watchParty.Users.Intersect(_movieTimeDb.User.Select(y => y.Username)))
             {
                 watchPartyEntity.UserWatchPartyXref.Add(new UserWatchPartyXref

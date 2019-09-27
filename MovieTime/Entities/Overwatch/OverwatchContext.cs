@@ -16,16 +16,16 @@ namespace MovieTime.Entities.Overwatch
         {
         }
 
-        public virtual DbQuery<PlayerRoleRecord> PlayerRoleRecords { get; set; }
+        public virtual DbSet<PlayerRoleRecord> PlayerRoleRecords { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
-
-            modelBuilder.Query<PlayerRoleRecord>(prr =>
+            
+            modelBuilder.Entity<PlayerRoleRecord>(prr =>
             {
                 prr.ToView("v_player_role_record", "overwatch");
-
+                prr.HasNoKey();
                 prr.Property(x => x.PlayerName).HasColumnName("player_name");
                 prr.Property(x => x.Losses).HasColumnName("losses");
                 prr.Property(x => x.Wins).HasColumnName("wins");

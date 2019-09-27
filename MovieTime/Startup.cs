@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.SpaServices.AngularCli;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using MovieTime.Entities;
 using MovieTime.Entities.Overwatch;
 using MovieTime.Services;
@@ -32,6 +33,7 @@ namespace MovieTime
             });
 
             services.AddMvc();
+            
             services.AddDbContext<MovieTimeContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("MovieTimeContext")));
 
@@ -47,13 +49,13 @@ namespace MovieTime
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             app.UseAuthentication();
-
-            if (env.IsDevelopment())
+            app.UseAuthorization();
+            if (env.EnvironmentName.Equals(Environments.Development))
             {
-                app.UseBrowserLink();
+                //app.UseBrowserLink();
                 app.UseDeveloperExceptionPage();
             }
             else
@@ -62,23 +64,29 @@ namespace MovieTime
             }
 
             app.UseStaticFiles();
-
+            app.UseRouting();
             app.UseCors(options =>
             {
                 options.AllowAnyOrigin();
             });
 
-            app.UseMvc(routes =>
+            app.UseEndpoints(endpoints =>
             {
-                routes.MapRoute(
-                    name: "default",
-                    template: "{controller=Account}/{action=Login}");
-
-                routes.MapRoute(
-                    "angular",
-                    "angular/{*url}",
-                    new { controller = "Angular", action = "Start" });
+                endpoints.MapControllerRoute("default", "{controller=Account}/{action=Login}");
+                endpoints.MapControllerRoute("angular", "angular/{*url}", new { controller = "Angular", action = "Start" });
             });
+
+            //app.UseMvc(routes =>
+            //{
+            //    routes.MapRoute(
+            //        name: "default",
+            //        template: "{controller=Account}/{action=Login}");
+
+            //    routes.MapRoute(
+            //        "angular",
+            //        "angular/{*url}",
+            //        new { controller = "Angular", action = "Start" });
+            //});
 
             app.UseSpa(spa =>
             {

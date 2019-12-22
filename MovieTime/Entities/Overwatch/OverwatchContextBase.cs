@@ -4,13 +4,13 @@ using Microsoft.EntityFrameworkCore.Metadata;
 
 namespace MovieTime.Entities.Overwatch
 {
-    public partial class OverwatchContextBase : DbContext
+    public partial class OverwatchContext : DbContext
     {
-        public OverwatchContextBase()
+        public OverwatchContext()
         {
         }
 
-        public OverwatchContextBase(DbContextOptions<OverwatchContextBase> options)
+        public OverwatchContext(DbContextOptions<OverwatchContext> options)
             : base(options)
         {
         }
@@ -128,6 +128,8 @@ namespace MovieTime.Entities.Overwatch
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_player_match_xref_to_player");
             });
+
+            ViewBuilder(modelBuilder);
         }
     }
 }

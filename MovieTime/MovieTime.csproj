@@ -34,8 +34,8 @@
     <DotNetCliToolReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Tools" Version="2.0.4" />
   </ItemGroup>
 
-  <Target Name="Build Angular" BeforeTargets="Build">
-    <Exec Command="npm run build --prefix ./Angular"></Exec>
-  </Target>
+  <!--<Target Name="Build Angular" BeforeTargets="Build">
+    <Exec Command="npm run build -prefix ./Angular"></Exec>
+  </Target>-->
 
 </Project>

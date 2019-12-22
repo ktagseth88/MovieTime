@@ -5,23 +5,12 @@ using Microsoft.EntityFrameworkCore.Metadata;
 
 namespace MovieTime.Entities.Overwatch
 {
-    public class OverwatchContext : OverwatchContextBase
+    public partial class OverwatchContext : DbContext
     {
-        public OverwatchContext()
-        {
-        }
-
-        public OverwatchContext(DbContextOptions<OverwatchContextBase> options)
-            : base(options)
-        {
-        }
-
         public virtual DbSet<PlayerRoleRecord> PlayerRoleRecords { get; set; }
 
-        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        protected void ViewBuilder(ModelBuilder modelBuilder)
         {
-            base.OnModelCreating(modelBuilder);
-            
             modelBuilder.Entity<PlayerRoleRecord>(prr =>
             {
                 prr.ToView("v_player_role_record", "overwatch");

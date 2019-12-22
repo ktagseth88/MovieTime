@@ -22,7 +22,6 @@ namespace MovieTime
 
         public IConfiguration Configuration { get; }
 
-        // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddAuthentication(
@@ -39,16 +38,13 @@ namespace MovieTime
 
             services.AddDbContext<OverwatchContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("MovieTimeContext")));
-            services.AddDbContext<OverwatchContextBase>(options =>
-                options.UseSqlServer(Configuration.GetConnectionString("MovieTimeContext")));
 
             services.AddScoped<AccountService>();
             services.AddScoped<MovieService>();
             services.AddScoped<WatchPartyService>();
-            services.AddTransient<MatchService>();
+            services.AddScoped<MatchService>();
         }
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             app.UseAuthentication();
@@ -73,7 +69,7 @@ namespace MovieTime
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllerRoute("default", "{controller=Account}/{action=Login}");
-                endpoints.MapControllerRoute("angular", "angular/{*url}", new { controller = "Angular", action = "Start" });
+                //endpoints.MapControllerRoute("angular", "angular/{*url}", new { controller = "Angular", action = "Start" });
             });
 
             //app.UseMvc(routes =>
@@ -88,11 +84,11 @@ namespace MovieTime
             //        new { controller = "Angular", action = "Start" });
             //});
 
-            app.UseSpa(spa =>
-            {
-                spa.Options.SourcePath = "Angular";
-                spa.UseAngularCliServer(npmScript: "start");
-            });
+            //app.UseSpa(spa =>
+            //{
+            //    spa.Options.SourcePath = "Angular";
+            //    spa.UseAngularCliServer(npmScript: "start");
+            //});
         }
     }
 }

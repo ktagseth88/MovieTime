@@ -1,0 +1,8 @@
+﻿CREATE TABLE [lol].[summoner]
+(
+	[SummonerId] INT NOT NULL PRIMARY KEY IDENTITY(1,1),
+	[AccountId] NVARCHAR(56) NOT NULL,
+	[Name] NVARCHAR(255) NOT NULL,
+	[RiotSummonerId] NVARCHAR(63) NOT NULL,
+	[Puuid] NVARCHAR(78) NOT NULL
+)

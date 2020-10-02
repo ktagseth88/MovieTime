@@ -1,0 +1,49 @@
+﻿{
+   "ContextClassName": "MovietimeContext",
+   "ContextNamespace": null,
+   "DefaultDacpacSchema": null,
+   "FilterSchemas": false,
+   "IncludeConnectionString": false,
+   "ModelNamespace": null,
+   "OutputContextPath": null,
+   "OutputPath": null,
+   "ProjectRootNamespace": "lol.dataloader",
+   "Schemas": null,
+   "SelectedHandlebarsLanguage": 0,
+   "SelectedToBeGenerated": 0,
+   "Tables": [
+      {
+         "HasPrimaryKey": true,
+         "Name": "[lol].[champion]"
+      },
+      {
+         "HasPrimaryKey": true,
+         "Name": "[lol].[match]"
+      },
+      {
+         "HasPrimaryKey": true,
+         "Name": "[lol].[match_participant]"
+      },
+      {
+         "HasPrimaryKey": true,
+         "Name": "[lol].[summoner]"
+      },
+      {
+         "HasPrimaryKey": true,
+         "Name": "[lol].[team_bans]"
+      },
+      {
+         "HasPrimaryKey": true,
+         "Name": "[lol].[team_stats]"
+      }
+   ],
+   "UseDatabaseNames": false,
+   "UseDbContextSplitting": false,
+   "UseFluentApiOnly": false,
+   "UseHandleBars": false,
+   "UseInflector": false,
+   "UseLegacyPluralizer": false,
+   "UseNodaTime": false,
+   "UseSpatial": false,
+   "UseStoredProcedures": false
+}

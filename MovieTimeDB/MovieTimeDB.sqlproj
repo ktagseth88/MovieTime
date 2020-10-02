@@ -59,6 +59,7 @@
     <Folder Include="Properties" />
     <Folder Include="overwatch-stats" />
     <Folder Include="overwatch-stats\Views" />
+    <Folder Include="lol" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="user.sql" />
@@ -75,5 +76,14 @@
     <Build Include="overwatch-stats\player.sql" />
     <Build Include="overwatch-stats\player_match_xref.sql" />
     <Build Include="overwatch-stats\Views\v_player_role_record.sql" />
+    <Build Include="lol\lol.sql" />
+    <Build Include="lol\match.sql" />
+    <Build Include="lol\summoner.sql" />
+    <Build Include="lol\team_stats.sql" />
+    <Build Include="lol\team_ban.sql" />
+    <Build Include="lol\team_stats_team_ban_xref.sql" />
+    <Build Include="lol\champion.sql" />
+    <Build Include="lol\match_participant.sql" />
+    <Build Include="lol\team_stats_match_xref.sql" />
   </ItemGroup>
 </Project>

@@ -11,6 +11,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MovieTime.DAL", "MovieTime.
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MovieTime.Common", "MovieTime.Common\MovieTime.Common.csproj", "{5F7903A6-C9F0-4749-BDC9-DD995201BE3B}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "lol.dataloader", "lol.dataloader\lol.dataloader.csproj", "{B3908595-CC1E-45FD-A96C-975BE607561E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -35,6 +37,10 @@ Global
 		{5F7903A6-C9F0-4749-BDC9-DD995201BE3B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5F7903A6-C9F0-4749-BDC9-DD995201BE3B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5F7903A6-C9F0-4749-BDC9-DD995201BE3B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B3908595-CC1E-45FD-A96C-975BE607561E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B3908595-CC1E-45FD-A96C-975BE607561E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B3908595-CC1E-45FD-A96C-975BE607561E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B3908595-CC1E-45FD-A96C-975BE607561E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

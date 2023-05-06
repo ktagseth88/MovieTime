@@ -48,7 +48,7 @@ namespace MovieTime
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             app.UseAuthentication();
-            app.UseAuthorization();
+
             if (env.EnvironmentName.Equals(Environments.Development))
             {
                 //app.UseBrowserLink();
@@ -61,6 +61,7 @@ namespace MovieTime
 
             app.UseStaticFiles();
             app.UseRouting();
+            app.UseAuthorization();
             app.UseCors(options =>
             {
                 options.AllowAnyOrigin();

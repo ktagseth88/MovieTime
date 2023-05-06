@@ -1,6 +1,7 @@
 ﻿CREATE TABLE [lol].[match_participant]
 (
 	[match_participant_id] INT NOT NULL PRIMARY KEY IDENTITY(1,1),
+	[summoner_id] NVARCHAR(255) NOT NULL,
 	[match_id] INT NOT NULL,
 	[champion_id] INT NOT NULL,
 	[role] NVARCHAR(255) NOT NULL,

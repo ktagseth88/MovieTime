@@ -12,6 +12,8 @@ namespace lol.dataloader
         [Key]
         [Column("match_participant_id")]
         public int MatchParticipantId { get; set; }
+        [Column("summoner_id")]
+        public string SummonerId { get; set; }
         [Column("match_id")]
         public int MatchId { get; set; }
         [Column("champion_id")]

@@ -10,17 +10,22 @@ namespace lol.dataloader
     public partial class Summoner
     {
         [Key]
+        [Column("summoner_id")]
         public int SummonerId { get; set; }
         [Required]
+        [Column("account_id")]
         [StringLength(56)]
         public string AccountId { get; set; }
         [Required]
+        [Column("name")]
         [StringLength(255)]
         public string Name { get; set; }
         [Required]
+        [Column("riot_summoner_id")]
         [StringLength(63)]
         public string RiotSummonerId { get; set; }
         [Required]
+        [Column("puuid")]
         [StringLength(78)]
         public string Puuid { get; set; }
     }

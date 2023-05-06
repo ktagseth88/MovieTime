@@ -1,6 +1,9 @@
 ﻿CREATE TABLE [lol].[match]
 (
-	[MatchId] INT NOT NULL PRIMARY KEY IDENTITY(1,1),
-	[RiotMatchId] BIGINT NOT NULL,
-	[GameDurationInSeconds] BIGINT NOT NULL
+	[match_id] INT NOT NULL PRIMARY KEY IDENTITY(1,1),
+	[riot_match_id] BIGINT NOT NULL,
+	[game_duration_in_seconds] BIGINT NOT NULL,
+	[season] INT NULL,
+	[queue_type] INT NULL,
+	[game_version] NVARCHAR(MAX) NULL
 )

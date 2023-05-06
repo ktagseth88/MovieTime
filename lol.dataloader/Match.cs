@@ -10,8 +10,17 @@ namespace lol.dataloader
     public partial class Match
     {
         [Key]
+        [Column("match_id")]
         public int MatchId { get; set; }
+        [Column("riot_match_id")]
         public long RiotMatchId { get; set; }
+        [Column("game_duration_in_seconds")]
         public long GameDurationInSeconds { get; set; }
+        [Column("season")]
+        public int? Season { get; set; }
+        [Column("queue_type")]
+        public int? QueueType { get; set; }
+        [Column("game_version")]
+        public string GameVersion { get; set; }
     }
 }

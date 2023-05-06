@@ -1,6 +1,7 @@
 ﻿CREATE TABLE [lol].[team_stats]
 (
 	[team_stats_id] INT NOT NULL PRIMARY KEY IDENTITY(1,1),
+	[match_id] INT NOT NULL,
 	[tower_kills] INT NOT NULL,
 	[first_blood] BIT NOT NULL,
 	[inhibitor_kills] INT NOT NULL,

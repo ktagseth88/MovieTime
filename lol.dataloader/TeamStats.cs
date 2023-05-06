@@ -12,6 +12,8 @@ namespace lol.dataloader
         [Key]
         [Column("team_stats_id")]
         public int TeamStatsId { get; set; }
+        [Column("match_id")]
+        public int MatchId { get; set; }
         [Column("tower_kills")]
         public int TowerKills { get; set; }
         [Column("first_blood")]

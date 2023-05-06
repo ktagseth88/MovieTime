@@ -12,6 +12,8 @@ namespace lol.dataloader
         [Key]
         [Column("team_ban_id")]
         public int TeamBanId { get; set; }
+        [Column("team_stats_id")]
+        public int TeamStatsId { get; set; }
         [Column("champion_id")]
         public int ChampionId { get; set; }
         [Column("pick_turn")]

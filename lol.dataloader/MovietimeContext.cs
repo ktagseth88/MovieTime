@@ -18,7 +18,8 @@ namespace lol.dataloader
 
         protected override void OnConfiguring(DbContextOptionsBuilder options)
         {
-            options.UseSqlServer("Data Source=thedinks.database.windows.net;Initial Catalog=MovieTime;Persist Security Info=True;User ID=dinkadmin;Password=Sadtoilet2;Pooling=False;MultipleActiveResultSets=False;Connect Timeout=60;Encrypt=True;TrustServerCertificate=False");
+            options.UseSqlServer("Data Source=thedinks.database.windows.net;Initial Catalog=MovieTime;Persist Security Info=True;User ID=dinkadmin;Password=Sprint.chew.table1;Pooling=False;MultipleActiveResultSets=False;Connect Timeout=60;Encrypt=True;TrustServerCertificate=False",
+                providerOptions => providerOptions.EnableRetryOnFailure());
         }
 
         public virtual DbSet<Champion> Champion { get; set; }

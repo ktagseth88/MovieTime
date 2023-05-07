@@ -7,8 +7,10 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using MovieTime.Entities;
+using MovieTime.Entities.Lol;
 using MovieTime.Entities.Overwatch;
 using MovieTime.Services;
+using MovieTime.Services.Lol;
 using MovieTime.Services.Overwatch;
 
 namespace MovieTime
@@ -24,6 +26,7 @@ namespace MovieTime
 
         public void ConfigureServices(IServiceCollection services)
         {
+            Dapper.DefaultTypeMap.MatchNamesWithUnderscores = true;
             services.AddAuthentication(
                 CookieAuthenticationDefaults.AuthenticationScheme
             ).AddCookie(options =>
@@ -39,10 +42,16 @@ namespace MovieTime
             services.AddDbContext<OverwatchContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("MovieTimeContext")));
 
+            services.AddDbContext<LolContext>(options =>
+            {
+                options.UseSqlServer(Configuration.GetConnectionString("MovieTimeContext"));
+            });
+
             services.AddScoped<AccountService>();
             services.AddScoped<MovieService>();
             services.AddScoped<WatchPartyService>();
             services.AddScoped<MatchService>();
+            services.AddScoped<PlayerStatService>();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

@@ -22,7 +22,8 @@ namespace MovieTime.Services
             var watchParty = await _movieTimeDb.WatchParty.AsNoTracking()
                 .Where(x => x.UserWatchPartyXref
                     .Select(y => y.User.Username)
-                    .Contains(username))
+                        .Contains(username)
+                     )
                 .Select(x => new Models.WatchParty
                 {
                     PartyName = x.Name,

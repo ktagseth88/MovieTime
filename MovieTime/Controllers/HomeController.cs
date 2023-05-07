@@ -2,15 +2,8 @@
 using MovieTime.Models;
 using System.Diagnostics;
 using Microsoft.AspNetCore.Authorization;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
-using System.IO;
 using CsvHelper;
 using MovieTime.ViewModels.WatchList;
-using System.Collections.Generic;
-using System.Linq;
-using CsvHelper.Configuration;
-using System;
 using MovieTime.Services;
 
 namespace MovieTime.Controllers
@@ -47,7 +40,8 @@ namespace MovieTime.Controllers
             {
                 //fileContents = await reader.ReadToEndAsync();
                 var csvReader = new CsvReader((IParser)reader);
-                csvReader.Configuration.RegisterClassMap<WatchListUploadMap>();
+                csvReader.Context.RegisterClassMap<WatchListUploadMap>();
+                
                 contents = csvReader.GetRecords<WatchListUpload>().ToList();
             }
 
